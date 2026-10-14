@@ -6,7 +6,7 @@ import { BOOK_PRESETS } from './data/bookPresets';
 import { HandDrawnCard } from './components/HandDrawnCard';
 import { InputPanel } from './components/InputPanel';
 import { CustomizerPanel } from './components/CustomizerPanel';
-import { Sparkles, RefreshCw, Eye, Share2, Layers, CheckCircle, Download } from 'lucide-react';
+import { Sparkles, RefreshCw, Eye, Share2, Layers, CheckCircle, Download, Smartphone } from 'lucide-react';
 
 export const App: React.FC = () => {
   // Default Initial Card Data
@@ -61,10 +61,15 @@ export const App: React.FC = () => {
         origin: { y: 0.6 },
       });
 
-      const link = document.createElement('a');
-      link.download = `${cardData.bookTitle.replace(/[《》]/g, '') || '手绘卡片'}_知识卡片.png`;
-      link.href = dataUrl;
-      link.click();
+      // Try automatic download for web browsers
+      try {
+        const link = document.createElement('a');
+        link.download = `${cardData.bookTitle.replace(/[《》]/g, '') || '手绘卡片'}_知识卡片.png`;
+        link.href = dataUrl;
+        link.click();
+      } catch (e) {
+        console.log('Mobile browser fallback to long-press preview', e);
+      }
     } catch (err) {
       console.error('Failed to generate card image:', err);
       alert('卡片生成过程中遇到微小异常，请重试');
@@ -73,8 +78,33 @@ export const App: React.FC = () => {
     }
   };
 
+  // Mobile Web Share API
+  const handleMobileShare = async () => {
+    if (!previewImageUrl) return;
+
+    if (navigator.share) {
+      try {
+        const blob = await (await fetch(previewImageUrl)).blob();
+        const file = new File([blob], 'handdrawn-card.png', { type: 'image/png' });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: cardData.bookTitle || '手绘卡片',
+            text: cardData.quote || '分享一张精美手绘知识卡片',
+            files: [file],
+          });
+          return;
+        }
+      } catch (e) {
+        console.log('Native share error or canceled', e);
+      }
+    }
+
+    alert('提示：在手机上长按下方图片，即可保存到相册或发送给微信朋友！');
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans pb-20 sm:pb-6">
       {/* Top Header Bar */}
       <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -87,7 +117,7 @@ export const App: React.FC = () => {
                 手绘风图文生成器
               </h1>
               <p className="text-[10px] text-slate-400 hidden sm:block">
-                社交媒体宣传 · 培训赋能 · 金句卡片 · 一键高清导出
+                手机H5专属 · 社交推广 · 培训金句 · 手机长按保存
               </p>
             </div>
           </div>
@@ -95,7 +125,7 @@ export const App: React.FC = () => {
           <button
             onClick={handleExportImage}
             disabled={isExporting}
-            className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm rounded-xl shadow-lg transition-all flex items-center gap-1.5 active:scale-95 disabled:opacity-50"
+            className="hidden sm:flex px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm rounded-xl shadow-lg transition-all items-center gap-1.5 active:scale-95 disabled:opacity-50"
           >
             {isExporting ? (
               <RefreshCw className="w-4 h-4 animate-spin" />
@@ -110,14 +140,15 @@ export const App: React.FC = () => {
       {/* Main Workspace Layout */}
       <main className="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Side: Real-time Live Hand-Drawn Card Preview Canvas */}
-        <div className="lg:col-span-6 flex flex-col items-center justify-center bg-slate-900/60 p-4 sm:p-6 rounded-3xl border border-slate-800/80 shadow-2xl relative min-h-[480px]">
+        <div className="lg:col-span-6 flex flex-col items-center justify-center bg-slate-900/60 p-3 sm:p-6 rounded-3xl border border-slate-800/80 shadow-2xl relative min-h-[420px]">
           <div className="w-full flex items-center justify-between mb-3 text-xs text-slate-400">
             <span className="flex items-center gap-1 font-kuaile text-amber-400">
               <Eye className="w-3.5 h-3.5" />
-              <span>实时效果预览 ({cardConfig.ratio})</span>
+              <span>手机实时预览 ({cardConfig.ratio})</span>
             </span>
-            <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700">
-              拖拽或调整右侧参数
+            <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700 flex items-center gap-1">
+              <Smartphone className="w-3 h-3 text-amber-400" />
+              <span>触控即时生效</span>
             </span>
           </div>
 
@@ -126,9 +157,9 @@ export const App: React.FC = () => {
             <HandDrawnCard cardRef={cardRef} data={cardData} config={cardConfig} />
           </div>
 
-          <div className="mt-4 flex items-center gap-2 text-[11px] text-slate-400">
+          <div className="mt-3 flex items-center gap-1.5 text-[11px] text-slate-400 text-center">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>适配小红书、微信朋友圈、培训PPT插入及社群裂变传播</span>
+            <span>适配微信朋友圈、小红书、社群推文及培训课件</span>
           </div>
         </div>
 
@@ -145,7 +176,7 @@ export const App: React.FC = () => {
               }`}
             >
               <Share2 className="w-4 h-4" />
-              <span>1. 输入/解析内容</span>
+              <span>1. 内容与智能提取</span>
             </button>
             <button
               onClick={() => setActiveTab('style')}
@@ -156,7 +187,7 @@ export const App: React.FC = () => {
               }`}
             >
               <Layers className="w-4 h-4" />
-              <span>2. 调节手绘样式</span>
+              <span>2. 调节手绘风格</span>
             </button>
           </div>
 
@@ -174,45 +205,82 @@ export const App: React.FC = () => {
         </div>
       </main>
 
+      {/* Sticky Bottom Bar for Mobile H5 Devices */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-3 flex items-center justify-between gap-3 shadow-2xl">
+        <div className="text-xs text-slate-300 font-medium">
+          <div className="font-bold text-amber-300 font-kuaile">{cardData.bookTitle || '手绘卡片'}</div>
+          <div className="text-[10px] text-slate-400">点击右侧按钮立即合成</div>
+        </div>
+
+        <button
+          onClick={handleExportImage}
+          disabled={isExporting}
+          className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-xl text-xs flex items-center gap-1.5 shadow-lg active:scale-95 disabled:opacity-50"
+        >
+          {isExporting ? (
+            <RefreshCw className="w-4 h-4 animate-spin" />
+          ) : (
+            <Sparkles className="w-4 h-4" />
+          )}
+          <span>{isExporting ? '合成中...' : '生成手绘图文'}</span>
+        </button>
+      </div>
+
       {/* Preview & Save Image Modal Dialog */}
       {previewImageUrl && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-5 max-w-md w-full flex flex-col items-center gap-4 shadow-2xl relative">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-slate-900 border border-slate-700 rounded-3xl p-4 sm:p-5 max-w-md w-full flex flex-col items-center gap-3 shadow-2xl relative">
             <div className="flex items-center justify-between w-full">
               <div className="font-bold text-base text-amber-300 font-kuaile flex items-center gap-1.5">
                 <CheckCircle className="w-5 h-5 text-emerald-400" />
-                <span>手绘卡片已成功生成！</span>
+                <span>手绘卡片已生成！</span>
               </div>
               <button
                 onClick={() => setPreviewImageUrl(null)}
-                className="text-slate-400 hover:text-white text-sm font-bold bg-slate-800 w-7 h-7 rounded-full flex items-center justify-center"
+                className="text-slate-400 hover:text-white text-sm font-bold bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center"
               >
                 ✕
               </button>
             </div>
 
-            <div className="max-h-[60vh] overflow-y-auto rounded-xl border border-slate-800 p-2 bg-slate-950">
+            {/* Mobile gesture banner */}
+            <div className="w-full bg-amber-500/10 border border-amber-500/30 rounded-xl p-2 text-center text-xs text-amber-300 flex items-center justify-center gap-1.5 font-medium">
+              <Smartphone className="w-4 h-4 shrink-0 text-amber-400" />
+              <span>📱 手机端提示：长按图片即可保存到相册或发微信</span>
+            </div>
+
+            <div className="max-h-[55vh] overflow-y-auto rounded-xl border border-slate-800 p-1.5 bg-slate-950">
               <img
                 src={previewImageUrl}
-                alt="手绘图文预览"
-                className="max-w-full rounded-lg shadow-lg"
+                alt="手绘图文预览 (长按保存)"
+                className="max-w-full rounded-lg shadow-lg select-none"
               />
             </div>
 
-            <div className="w-full flex gap-3">
-              <a
-                href={previewImageUrl}
-                download={`${cardData.bookTitle.replace(/[《》]/g, '') || '手绘卡片'}_知识卡片.png`}
-                className="flex-1 py-3 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold rounded-2xl text-center shadow-lg transition-all text-sm flex items-center justify-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                <span>长按或点击下载高清图</span>
-              </a>
+            <div className="w-full flex flex-col gap-2">
+              <div className="flex gap-2">
+                <button
+                  onClick={handleMobileShare}
+                  className="flex-1 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold rounded-xl text-center shadow-lg transition-all text-xs flex items-center justify-center gap-1.5"
+                >
+                  <Share2 className="w-4 h-4" />
+                  <span>手机一键分享</span>
+                </button>
+                <a
+                  href={previewImageUrl}
+                  download={`${cardData.bookTitle.replace(/[《》]/g, '') || '手绘卡片'}_知识卡片.png`}
+                  className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold rounded-xl text-center shadow transition-all text-xs flex items-center justify-center gap-1.5"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>下载图片文件</span>
+                </a>
+              </div>
+
               <button
                 onClick={() => setPreviewImageUrl(null)}
-                className="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-2xl text-sm font-bold"
+                className="w-full py-2 bg-slate-800/60 hover:bg-slate-800 text-slate-400 rounded-xl text-xs font-medium"
               >
-                返回修改
+                关闭并继续编辑
               </button>
             </div>
           </div>
@@ -221,7 +289,7 @@ export const App: React.FC = () => {
 
       {/* Footer */}
       <footer className="border-t border-slate-900 py-4 text-center text-xs text-slate-500">
-        手绘风图文生成器 · 打造高颜值社交宣传 & 培训赋能金句卡片
+        手绘风图文生成器 · 手机移动端高颜值社交宣传卡片
       </footer>
     </div>
   );
