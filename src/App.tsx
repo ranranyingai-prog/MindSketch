@@ -46,11 +46,21 @@ export const App: React.FC = () => {
     setIsExporting(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 150));
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-      const dataUrl = await toPng(cardRef.current, {
-        pixelRatio: 2.5,
+      const elem = cardRef.current;
+      const width = elem.offsetWidth;
+      const height = elem.offsetHeight;
+
+      const dataUrl = await toPng(elem, {
+        width,
+        height,
+        pixelRatio: 3, // High DPI HD output for mobile phones like Huawei Mate 60 Pro
         cacheBust: true,
+        style: {
+          transform: 'none',
+          margin: '0',
+        },
       });
 
       setPreviewImageUrl(dataUrl);
@@ -61,7 +71,7 @@ export const App: React.FC = () => {
         origin: { y: 0.6 },
       });
 
-      // Try automatic download for web browsers
+      // Try automatic download
       try {
         const link = document.createElement('a');
         link.download = `${cardData.bookTitle.replace(/[《》]/g, '') || '手绘卡片'}_知识卡片.png`;
@@ -140,20 +150,20 @@ export const App: React.FC = () => {
       {/* Main Workspace Layout */}
       <main className="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Side: Real-time Live Hand-Drawn Card Preview Canvas */}
-        <div className="lg:col-span-6 flex flex-col items-center justify-center bg-slate-900/60 p-3 sm:p-6 rounded-3xl border border-slate-800/80 shadow-2xl relative min-h-[420px]">
-          <div className="w-full flex items-center justify-between mb-3 text-xs text-slate-400">
+        <div className="lg:col-span-6 flex flex-col items-center justify-center bg-slate-900/60 p-2 sm:p-6 rounded-3xl border border-slate-800/80 shadow-2xl relative min-h-[420px] overflow-x-hidden">
+          <div className="w-full flex items-center justify-between mb-3 text-xs text-slate-400 px-2">
             <span className="flex items-center gap-1 font-kuaile text-amber-400">
               <Eye className="w-3.5 h-3.5" />
               <span>手机实时预览 ({cardConfig.ratio})</span>
             </span>
             <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700 flex items-center gap-1">
               <Smartphone className="w-3 h-3 text-amber-400" />
-              <span>触控即时生效</span>
+              <span>全屏响应式</span>
             </span>
           </div>
 
-          {/* Render Hand-Drawn Card */}
-          <div className="w-full flex justify-center py-2">
+          {/* Render Hand-Drawn Card Wrapper */}
+          <div className="w-full flex justify-center py-2 px-1">
             <HandDrawnCard cardRef={cardRef} data={cardData} config={cardConfig} />
           </div>
 
@@ -209,7 +219,7 @@ export const App: React.FC = () => {
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-3 flex items-center justify-between gap-3 shadow-2xl">
         <div className="text-xs text-slate-300 font-medium">
           <div className="font-bold text-amber-300 font-kuaile">{cardData.bookTitle || '手绘卡片'}</div>
-          <div className="text-[10px] text-slate-400">点击右侧按钮立即合成</div>
+          <div className="text-[10px] text-slate-400">点击右侧按钮合成图片</div>
         </div>
 
         <button
@@ -228,12 +238,12 @@ export const App: React.FC = () => {
 
       {/* Preview & Save Image Modal Dialog */}
       {previewImageUrl && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-fade-in">
           <div className="bg-slate-900 border border-slate-700 rounded-3xl p-4 sm:p-5 max-w-md w-full flex flex-col items-center gap-3 shadow-2xl relative">
             <div className="flex items-center justify-between w-full">
               <div className="font-bold text-base text-amber-300 font-kuaile flex items-center gap-1.5">
                 <CheckCircle className="w-5 h-5 text-emerald-400" />
-                <span>手绘卡片已生成！</span>
+                <span>手绘卡片生成成功！</span>
               </div>
               <button
                 onClick={() => setPreviewImageUrl(null)}
@@ -246,14 +256,14 @@ export const App: React.FC = () => {
             {/* Mobile gesture banner */}
             <div className="w-full bg-amber-500/10 border border-amber-500/30 rounded-xl p-2 text-center text-xs text-amber-300 flex items-center justify-center gap-1.5 font-medium">
               <Smartphone className="w-4 h-4 shrink-0 text-amber-400" />
-              <span>📱 手机端提示：长按图片即可保存到相册或发微信</span>
+              <span>📱 华为/手机长按下方完整图片可保存到相册</span>
             </div>
 
-            <div className="max-h-[55vh] overflow-y-auto rounded-xl border border-slate-800 p-1.5 bg-slate-950">
+            <div className="max-h-[60vh] w-full overflow-y-auto rounded-xl border border-slate-800 p-2 bg-slate-950 flex justify-center">
               <img
                 src={previewImageUrl}
-                alt="手绘图文预览 (长按保存)"
-                className="max-w-full rounded-lg shadow-lg select-none"
+                alt="全尺寸手绘图文卡片 (长按保存)"
+                className="w-full max-w-full h-auto rounded-lg shadow-lg block select-none"
               />
             </div>
 

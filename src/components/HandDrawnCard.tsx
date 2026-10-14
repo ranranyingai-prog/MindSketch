@@ -77,12 +77,12 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
     patrick: 'font-patrick',
   }[config.font];
 
-  // Aspect Ratio Styles
+  // Aspect Ratio Styles - Optimized for mobile & export responsiveness
   const ratioClasses = {
-    '3:4': 'w-full max-w-[420px] aspect-[3/4]',
-    '1:1': 'w-full max-w-[420px] aspect-square',
-    '9:16': 'w-full max-w-[380px] aspect-[9/16]',
-    'auto': 'w-full max-w-[440px] h-auto',
+    '3:4': 'w-full max-w-[480px] aspect-[3/4]',
+    '1:1': 'w-full max-w-[480px] aspect-square',
+    '9:16': 'w-full max-w-[440px] aspect-[9/16]',
+    'auto': 'w-full max-w-[480px] h-auto',
   }[config.ratio];
 
   // Marker Color mapping
@@ -103,7 +103,7 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
   return (
     <div
       ref={cardRef}
-      className={`relative p-5 sm:p-6 overflow-hidden flex flex-col justify-between transition-all duration-300 ${themeStyles.bg} ${ratioClasses} ${fontClass}`}
+      className={`relative p-4 sm:p-6 overflow-hidden flex flex-col justify-between transition-all duration-300 shrink-0 ${themeStyles.bg} ${ratioClasses} ${fontClass}`}
       style={{
         boxSizing: 'border-box',
       }}
@@ -117,7 +117,7 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
 
       {/* Hand-drawn Outer Border Container */}
       <div
-        className={`relative z-10 flex-1 flex flex-col justify-between p-5 rounded-2xl ${themeStyles.cardBg} ${themeStyles.border} ${borderThicknessClass} ${themeStyles.shadow} sketch-border`}
+        className={`relative z-10 flex-1 flex flex-col justify-between p-4 sm:p-5 rounded-2xl ${themeStyles.cardBg} ${themeStyles.border} ${borderThicknessClass} ${themeStyles.shadow} sketch-border`}
       >
         {/* Card Header Section */}
         <div>
