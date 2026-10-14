@@ -1,32 +1,71 @@
-# React + TypeScript + Vite
+# 🎨 手绘风图文生成器 (H5 Web App)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+一个极简高颜值的手绘风格知识/金句卡片生成器 H5 程序。用户输入一段文字或选择书名，即可快速合成精美的手绘风格卡片，支持实时调节材质、字体、荧光划线、手绘贴纸，并能一键导出高清 PNG 图片，非常适合用于**社交媒体宣传（小红书、朋友圈、微博）**或**社群培训赋能**等场景。
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ 核心亮点与特色
 
-## React Compiler
+- 📖 **畅销爆款书单预设**：内置《认知觉醒》、《纳瓦尔宝典》、《原子习惯》、《穷查理宝典》、《被讨厌的勇气》等精选金句与干货提炼，一键快速载入。
+- 🪄 **智能文本解析**：支持粘贴任意非结构化笔记或培训大纲，自动智能提取核心金句、知识要点与行动指南。
+- 🎨 **丰富手绘材质与主题**：支持复古牛皮纸、萌趣便签、黑板板书、极简方格、素雅质感等多种风格背景。
+- ✍️ **多种艺术字体与涂鸦元素**：集成快乐手绘体、马山毛笔体、龙苍草书体、Patrick 英文手绘体，搭配可开关的胶带贴纸、手绘印章和荧光划线强调色。
+- 📐 **多比例社交媒体尺寸**：支持 3:4 (小红书卡片)、1:1 (朋友圈/Square)、9:16 (海报/Story) 以及 Auto (自适应长图)。
+- 📱 **移动端 H5 优化**：针对手机端优化触控体验，自带底部吸底合成栏、手机端 Web Share API 及长按保存图片提示。
+- 📦 **开箱即用单文件部署**：打包编译产物为独立的 `dist/index.html`，无需配置复杂的网页服务器，下载或双击即可直接在手机和浏览器中打开！
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## 🚀 快速上手与运行
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+### 1. 本地开发调试
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+# 安装依赖包
+npm install
+
+# 启动本地开发服务 (默认端口 3000)
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+在浏览器访问 `http://localhost:3000` 即可开始体验。
+
+### 2. 局域网手机实时预览
+
+```bash
+# 暴露局域网 IP
+npx vite --host
+```
+
+手机与电脑连接同一 Wi-Fi，扫描或访问终端输出的 `http://192.168.x.x:3000` 即可在手机上实时测试。
+
+---
+
+## 📦 打包部署与手机分发
+
+项目配置了 `vite-plugin-singlefile`，执行编译：
+
+```bash
+npm run build
+```
+
+打包产物位于 **`dist/index.html`**：
+
+1. **直接分发文件**：直接将 `dist/index.html` 发送到手机（如微信、飞书），在手机浏览器中直接打开即可运行。
+2. **静态网站托管**：将 `dist` 目录拖拽到 [Vercel](https://vercel.com) / [Netlify](https://netlify.com) / GitHub Pages，或者上传至腾讯云/阿里云 OSS，即可获得公开的移动端 HTTPS 网址。
+
+---
+
+## 🛠️ 技术栈
+
+- **前端框架**：React 19 + TypeScript + Vite
+- **样式引擎**：Tailwind CSS v4 + 响应式布局
+- **手绘渲染**：Custom Hand-drawn SVGs + CSS Sketchy Border Design
+- **卡片导出**：`html-to-image` + `canvas-confetti`
+- **打包插件**：`vite-plugin-singlefile`
+
+---
+
+## 📄 许可证
+
+MIT License
