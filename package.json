@@ -25,6 +25,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "autoprefixer": "^10.6.1",
     "oxlint": "^1.81.0",
+    "playwright": "^1.64.0",
     "postcss": "^8.5.30",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
