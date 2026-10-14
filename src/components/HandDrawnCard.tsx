@@ -77,11 +77,11 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
     patrick: 'font-patrick',
   }[config.font];
 
-  // Aspect Ratio Styles - Optimized for mobile & export responsiveness
+  // Aspect Ratio Styles - Optimized for mobile & export responsiveness without content clipping
   const ratioClasses = {
-    '3:4': 'w-full max-w-[480px] aspect-[3/4]',
-    '1:1': 'w-full max-w-[480px] aspect-square',
-    '9:16': 'w-full max-w-[440px] aspect-[9/16]',
+    '3:4': 'w-full max-w-[480px] min-h-[640px] h-auto',
+    '1:1': 'w-full max-w-[480px] min-h-[480px] h-auto',
+    '9:16': 'w-full max-w-[440px] min-h-[780px] h-auto',
     'auto': 'w-full max-w-[480px] h-auto',
   }[config.ratio];
 
@@ -103,7 +103,7 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
   return (
     <div
       ref={cardRef}
-      className={`relative p-4 sm:p-6 overflow-hidden flex flex-col justify-between transition-all duration-300 shrink-0 ${themeStyles.bg} ${ratioClasses} ${fontClass}`}
+      className={`relative p-3.5 sm:p-5 flex flex-col justify-between transition-all duration-300 shrink-0 ${themeStyles.bg} ${ratioClasses} ${fontClass}`}
       style={{
         boxSizing: 'border-box',
       }}
@@ -155,7 +155,7 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
 
           {/* Golden Quote Section */}
           {data.quote && (
-            <div className={`p-3.5 rounded-xl ${themeStyles.accentBg} relative my-3 border border-dashed ${themeStyles.border} sketch-border`}>
+            <div className={`p-3 rounded-xl ${themeStyles.accentBg} relative my-2.5 border border-dashed ${themeStyles.border} sketch-border`}>
               <div className="absolute -top-2.5 left-3 px-1.5 bg-amber-400 text-slate-900 font-bold text-[11px] rounded sketch-border">
                 💡 核心金句
               </div>
@@ -170,7 +170,7 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
 
           {/* Key Points / Takeaways Section */}
           {data.keyPoints && data.keyPoints.length > 0 && (
-            <div className="space-y-3 my-4">
+            <div className="space-y-2.5 my-3">
               <div className="flex items-center gap-2">
                 <HandDrawnSparkle />
                 <h3 className="font-bold text-sm tracking-wide font-kuaile uppercase">
@@ -179,24 +179,24 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
                 {config.showDoodleArrows && <HandDrawnArrow className="ml-auto opacity-70" />}
               </div>
 
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {data.keyPoints.map((point, idx) => (
                   <div
                     key={idx}
-                    className="flex items-start gap-2.5 bg-black/5 dark:bg-white/5 p-2.5 rounded-lg border border-slate-700/10"
+                    className="flex items-start gap-2 bg-black/5 dark:bg-white/5 p-2 sm:p-2.5 rounded-lg border border-slate-700/10"
                   >
-                    <span className="shrink-0 w-6 h-6 rounded-full bg-amber-400 text-slate-900 font-bold font-kuaile text-xs flex items-center justify-center sketch-border">
+                    <span className="shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-400 text-slate-900 font-bold font-kuaile text-xs flex items-center justify-center sketch-border">
                       {point.num || idx + 1}
                     </span>
                     <div className="flex-1">
                       {point.title && (
-                        <div className="font-bold text-sm leading-tight mb-0.5">
+                        <div className="font-bold text-xs sm:text-sm leading-tight mb-0.5">
                           {point.title}
                         </div>
                       )}
                       <div
                         className="leading-relaxed opacity-95"
-                        style={{ fontSize: `${config.bodyFontSize - 1}px` }}
+                        style={{ fontSize: `${Math.max(12, config.bodyFontSize - 1)}px` }}
                       >
                         {point.desc}
                       </div>
@@ -209,13 +209,13 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
 
           {/* Actionable Tip Section */}
           {data.actionTip && (
-            <div className="mt-4 p-3 bg-amber-300/30 border-2 border-slate-800 rounded-xl flex items-start gap-2.5 sketch-border">
+            <div className="mt-3 p-2.5 bg-amber-300/30 border-2 border-slate-800 rounded-xl flex items-start gap-2 sketch-border">
               <HandDrawnBulb className="shrink-0 text-amber-600 mt-0.5" />
               <div>
                 <div className="font-bold text-xs text-amber-900 font-kuaile">落地赋能指南</div>
                 <div
                   className="leading-relaxed font-medium"
-                  style={{ fontSize: `${config.bodyFontSize - 2}px` }}
+                  style={{ fontSize: `${Math.max(11, config.bodyFontSize - 2)}px` }}
                 >
                   {data.actionTip}
                 </div>

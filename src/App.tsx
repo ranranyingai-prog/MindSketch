@@ -57,6 +57,7 @@ export const App: React.FC = () => {
         height,
         pixelRatio: 3, // High DPI HD output for mobile phones like Huawei Mate 60 Pro
         cacheBust: true,
+        skipFonts: true,
         style: {
           transform: 'none',
           margin: '0',
