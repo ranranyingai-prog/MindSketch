@@ -183,23 +183,21 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
                 {data.keyPoints.map((point, idx) => (
                   <div
                     key={idx}
-                    className="flex items-start gap-2 bg-black/5 dark:bg-white/5 p-2 sm:p-2.5 rounded-lg border border-slate-700/10"
+                    className="flex items-start gap-2 bg-black/5 dark:bg-white/5 p-2 sm:p-2.5 rounded-xl border border-slate-700/10 shadow-sm"
                   >
-                    <span className="shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-400 text-slate-900 font-bold font-kuaile text-xs flex items-center justify-center sketch-border">
+                    <span className="shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-amber-400 text-slate-950 font-black font-kuaile text-xs flex items-center justify-center sketch-border mt-0.5">
                       {point.num || idx + 1}
                     </span>
-                    <div className="flex-1">
+                    <div
+                      className="flex-1 leading-relaxed text-left"
+                      style={{ fontSize: `${Math.max(12, config.bodyFontSize - 1)}px` }}
+                    >
                       {point.title && (
-                        <div className="font-bold text-xs sm:text-sm leading-tight mb-0.5">
-                          {point.title}
-                        </div>
+                        <span className="font-extrabold mr-1.5 font-kuaile tracking-wide text-amber-950 dark:text-amber-200 inline">
+                          {point.title.replace(/[:：\s]+$/, '')}：
+                        </span>
                       )}
-                      <div
-                        className="leading-relaxed opacity-95"
-                        style={{ fontSize: `${Math.max(12, config.bodyFontSize - 1)}px` }}
-                      >
-                        {point.desc}
-                      </div>
+                      <span className="opacity-95 font-medium">{point.desc}</span>
                     </div>
                   </div>
                 ))}

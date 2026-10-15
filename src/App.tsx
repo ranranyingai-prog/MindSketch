@@ -3,6 +3,7 @@ import { toPng } from 'html-to-image';
 import confetti from 'canvas-confetti';
 import type { CardData, CardConfig } from './types/card';
 import { BOOK_PRESETS } from './data/bookPresets';
+import { matchBestTemplate } from './data/templates';
 import { HandDrawnCard } from './components/HandDrawnCard';
 import { InputPanel } from './components/InputPanel';
 import { CustomizerPanel } from './components/CustomizerPanel';
@@ -40,6 +41,21 @@ export const App: React.FC = () => {
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'content' | 'style'>('content');
 
+  // Handle Card Data Change with smart template auto-matching option
+  const handleCardDataChange = (newData: CardData, autoMatchTemplate = false) => {
+    setCardData(newData);
+
+    if (autoMatchTemplate) {
+      const bestMatch = matchBestTemplate(newData);
+      if (bestMatch) {
+        setCardConfig((prev) => ({
+          ...prev,
+          ...bestMatch.config,
+        }));
+      }
+    }
+  };
+
   // Trigger high-resolution PNG export using html-to-image
   const handleExportImage = async () => {
     if (!cardRef.current) return;
@@ -55,7 +71,7 @@ export const App: React.FC = () => {
       const dataUrl = await toPng(elem, {
         width,
         height,
-        pixelRatio: 3, // High DPI HD output for mobile phones like Huawei Mate 60 Pro
+        pixelRatio: 3, // High DPI HD output
         cacheBust: true,
         skipFonts: true,
         style: {
@@ -128,7 +144,7 @@ export const App: React.FC = () => {
                 手绘风图文生成器
               </h1>
               <p className="text-[10px] text-slate-400 hidden sm:block">
-                手机H5专属 · 社交推广 · 培训金句 · 手机长按保存
+                手机H5专属 · 智能匹配内置模板 · 社交推广 · 手机长按保存
               </p>
             </div>
           </div>
@@ -198,15 +214,19 @@ export const App: React.FC = () => {
               }`}
             >
               <Layers className="w-4 h-4" />
-              <span>2. 调节手绘风格</span>
+              <span>2. 切换模板与风格</span>
             </button>
           </div>
 
           {/* Tab Panels */}
           {activeTab === 'content' ? (
-            <InputPanel cardData={cardData} onChange={setCardData} />
+            <InputPanel
+              cardData={cardData}
+              onChange={(data, autoMatch) => handleCardDataChange(data, autoMatch)}
+            />
           ) : (
             <CustomizerPanel
+              cardData={cardData}
               config={cardConfig}
               onChange={setCardConfig}
               onExport={handleExportImage}

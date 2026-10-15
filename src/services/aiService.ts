@@ -8,9 +8,9 @@ export interface AiConfig {
 }
 
 const DEFAULT_AI_CONFIG: AiConfig = {
-  apiKey: '',
-  baseUrl: 'https://api.deepseek.com/v1',
-  model: 'deepseek-chat',
+  apiKey: (import.meta as any).env?.VITE_ARK_API_KEY || '',
+  baseUrl: (import.meta as any).env?.VITE_ARK_BASE_URL || 'https://ark.cn-beijing.volces.com/api/v3',
+  model: (import.meta as any).env?.VITE_ARK_MODEL || 'doubao-1-5-pro-32k-250115',
 };
 
 const STORAGE_KEY = 'handdrawn_card_ai_config';
@@ -70,14 +70,18 @@ export async function generateCardFromAi(
         : `请提炼以下文字内容为手绘知识卡片：\n\n${trimmed}`;
 
       const cleanBaseUrl = config.baseUrl.replace(/\/+$/, '');
-      const response = await fetch(`${cleanBaseUrl}/chat/completions`, {
+      const requestUrl = cleanBaseUrl.endsWith('/chat/completions')
+        ? cleanBaseUrl
+        : `${cleanBaseUrl}/chat/completions`;
+
+      const response = await fetch(requestUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${config.apiKey.trim()}`,
         },
         body: JSON.stringify({
-          model: config.model || 'deepseek-chat',
+          model: config.model || 'doubao-1-5-pro-32k-250115',
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: userPrompt },
@@ -123,10 +127,8 @@ export async function generateCardFromAi(
         footerTag: '手绘读书笔记',
       };
     } catch (err: any) {
-      console.warn('AI API call failed or missing, falling back to local synthesizer:', err);
-      if (config.apiKey) {
-        throw new Error(`大模型接口调用出错: ${err.message || err}`);
-      }
+      console.warn('AI API call encountered error, falling back gracefully to local synthesizer:', err);
+      return fallbackLocalSynthesis(trimmed, mode);
     }
   }
 

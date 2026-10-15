@@ -19,7 +19,7 @@ import {
 
 interface InputPanelProps {
   cardData: CardData;
-  onChange: (data: CardData) => void;
+  onChange: (data: CardData, autoMatchTemplate?: boolean) => void;
 }
 
 export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) => {
@@ -63,7 +63,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
       onChange({
         ...cardData,
         ...result,
-      });
+      }, true);
       setStatusMsg({ type: 'success', text: '手绘卡片生成成功！' });
       setTimeout(() => setStatusMsg(null), 3000);
     } catch (err: any) {
@@ -87,7 +87,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
         actionTip: preset.actionTip,
         footerTag: '手绘读书笔记',
         stampText: preset.stampText,
-      });
+      }, true);
     }
   };
 
