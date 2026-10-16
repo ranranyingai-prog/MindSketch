@@ -193,11 +193,11 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, con
                       style={{ fontSize: `${Math.max(12, config.bodyFontSize - 1)}px` }}
                     >
                       {point.title && (
-                        <span className="font-extrabold mr-1.5 font-kuaile tracking-wide text-amber-950 dark:text-amber-200 inline">
+                        <span className="font-extrabold mr-1.5 font-kuaile tracking-wide text-amber-950 dark:text-amber-200 inline-block whitespace-nowrap shrink-0">
                           {point.title.replace(/[:：\s]+$/, '')}：
                         </span>
                       )}
-                      <span className="opacity-95 font-medium">{point.desc}</span>
+                      <span className="opacity-95 font-medium break-words leading-relaxed">{point.desc}</span>
                     </div>
                   </div>
                 ))}

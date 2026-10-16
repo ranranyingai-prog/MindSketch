@@ -62,7 +62,11 @@ export const App: React.FC = () => {
     setIsExporting(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      // Ensure web fonts are completely loaded before rasterizing DOM into canvas PNG
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       const elem = cardRef.current;
       const width = elem.offsetWidth;
@@ -73,7 +77,6 @@ export const App: React.FC = () => {
         height,
         pixelRatio: 3, // High DPI HD output
         cacheBust: true,
-        skipFonts: true,
         style: {
           transform: 'none',
           margin: '0',
