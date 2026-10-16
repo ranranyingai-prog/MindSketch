@@ -15,6 +15,8 @@ import {
   CheckCircle2,
   BookMarked,
   FileText,
+  User,
+  ShieldCheck,
 } from 'lucide-react';
 
 interface InputPanelProps {
@@ -23,7 +25,7 @@ interface InputPanelProps {
 }
 
 export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) => {
-  const [activeTab, setActiveTab] = useState<'ai' | 'preset' | 'custom'>('ai');
+  const [activeTab, setActiveTab] = useState<'ai' | 'preset' | 'custom' | 'ip'>('ai');
   const [aiMode, setAiMode] = useState<'book' | 'text'>('book');
   const [inputText, setInputText] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -79,6 +81,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
     const preset = BOOK_PRESETS.find((p) => p.id === presetId);
     if (preset) {
       onChange({
+        ...cardData,
         bookTitle: preset.bookTitle,
         author: preset.author,
         category: preset.category,
@@ -140,41 +143,53 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
       </div>
 
       {/* Mode Navigation Tabs */}
-      <div className="flex bg-slate-900/80 p-1 rounded-xl mb-4 border border-slate-700/60 font-medium text-xs sm:text-sm">
+      <div className="grid grid-cols-4 gap-1 bg-slate-900/80 p-1 rounded-xl mb-4 border border-slate-700/60 font-medium text-xs">
         <button
           onClick={() => setActiveTab('ai')}
-          className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+          className={`py-2 rounded-lg flex items-center justify-center gap-1 transition-all ${
             activeTab === 'ai'
               ? 'bg-amber-500 text-slate-950 font-bold shadow'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Sparkles className="w-4 h-4" />
-          <span>AI一键生成</span>
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>AI生成</span>
         </button>
 
         <button
           onClick={() => setActiveTab('preset')}
-          className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+          className={`py-2 rounded-lg flex items-center justify-center gap-1 transition-all ${
             activeTab === 'preset'
               ? 'bg-amber-500 text-slate-950 font-bold shadow'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
-          <BookOpen className="w-4 h-4" />
-          <span>爆款书单Preset</span>
+          <BookOpen className="w-3.5 h-3.5" />
+          <span>爆款Preset</span>
         </button>
 
         <button
           onClick={() => setActiveTab('custom')}
-          className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+          className={`py-2 rounded-lg flex items-center justify-center gap-1 transition-all ${
             activeTab === 'custom'
               ? 'bg-amber-500 text-slate-950 font-bold shadow'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Edit3 className="w-4 h-4" />
+          <Edit3 className="w-3.5 h-3.5" />
           <span>自由修改</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('ip')}
+          className={`py-2 rounded-lg flex items-center justify-center gap-1 transition-all ${
+            activeTab === 'ip'
+              ? 'bg-amber-500 text-slate-950 font-bold shadow'
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <User className="w-3.5 h-3.5" />
+          <span>个人IP</span>
         </button>
       </div>
 
@@ -192,10 +207,9 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
         </div>
       )}
 
-      {/* Tab 1: AI Generation (Book Title OR Raw Text) */}
+      {/* Tab 1: AI Generation */}
       {activeTab === 'ai' && (
         <div className="space-y-3.5">
-          {/* Sub-mode selector: Book Title vs Long Text */}
           <div className="flex gap-2">
             <button
               type="button"
@@ -210,7 +224,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
               }`}
             >
               <BookMarked className="w-3.5 h-3.5" />
-              <span>输入任意书名/主题</span>
+              <span>书名/主题</span>
             </button>
             <button
               type="button"
@@ -225,26 +239,23 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
               }`}
             >
               <FileText className="w-3.5 h-3.5" />
-              <span>粘贴长文/读书笔记提炼</span>
+              <span>长文笔记提炼</span>
             </button>
           </div>
 
-          {/* Input Box based on aiMode */}
           {aiMode === 'book' ? (
             <div>
               <label className="block text-xs font-medium text-slate-300 mb-1.5">
                 输入想生成的书名或培训主题：
               </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  placeholder="如: 《原则》、《非暴力沟通》、《金字塔原理》或 目标管理"
-                  className="flex-1 p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-amber-500 text-slate-100 placeholder:text-slate-500"
-                  onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-                />
-              </div>
+              <input
+                type="text"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                placeholder="如: 《原则》、《被讨厌的勇气》或 团队激励技巧"
+                className="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-amber-500 text-slate-100 placeholder:text-slate-500"
+                onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
+              />
             </div>
           ) : (
             <div>
@@ -261,7 +272,6 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
             </div>
           )}
 
-          {/* Generate Button */}
           <button
             onClick={handleGenerate}
             disabled={isGenerating || !inputText.trim()}
@@ -279,12 +289,6 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
               </>
             )}
           </button>
-
-          {!aiConfig.apiKey && (
-            <p className="text-[11px] text-slate-400 text-center italic">
-              💡 提示：当前未绑定 API Key，将使用内置智能提炼；可点击右上角“大模型设置”连接 DeepSeek/OpenAI。
-            </p>
-          )}
         </div>
       )}
 
@@ -324,11 +328,80 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
         </div>
       )}
 
-      {/* Content Form Editor (Always accessible or on Custom Tab) */}
+      {/* Tab 3: Personal IP Branding Settings */}
+      {activeTab === 'ip' && (
+        <div className="space-y-3">
+          <div className="font-bold text-xs text-amber-400 tracking-wider font-kuaile flex items-center gap-1.5">
+            <User className="w-4 h-4" />
+            <span>个人 IP 智卡名片配置</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-[11px] text-slate-400 mb-1">创作者昵称 / 品牌名</label>
+              <input
+                type="text"
+                value={cardData.creatorName || ''}
+                onChange={(e) => onChange({ ...cardData, creatorName: e.target.value })}
+                placeholder="如: 读书讲师阿强"
+                className="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:border-amber-500 text-slate-100"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] text-slate-400 mb-1">蓝V认证头衔 / 描述</label>
+              <input
+                type="text"
+                value={cardData.creatorTitle || ''}
+                onChange={(e) => onChange({ ...cardData, creatorTitle: e.target.value })}
+                placeholder="如: 知名读书博主 · 50w+粉丝"
+                className="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:border-amber-500 text-slate-100"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-[11px] text-slate-400 mb-1">头像图片 URL</label>
+              <input
+                type="text"
+                value={cardData.avatarUrl || ''}
+                onChange={(e) => onChange({ ...cardData, avatarUrl: e.target.value })}
+                placeholder="粘贴头像图片网络链接"
+                className="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:border-amber-500 text-slate-100"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] text-slate-400 mb-1">二维码图片 URL</label>
+              <input
+                type="text"
+                value={cardData.qrCodeUrl || ''}
+                onChange={(e) => onChange({ ...cardData, qrCodeUrl: e.target.value })}
+                placeholder="公众号/微信二维码 URL"
+                className="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs focus:border-amber-500 text-slate-100"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between p-2.5 bg-slate-900/60 rounded-xl border border-slate-700/60 text-xs">
+            <span className="flex items-center gap-1.5 text-slate-300">
+              <ShieldCheck className="w-4 h-4 text-sky-400" />
+              <span>开启创作者蓝V认证金标</span>
+            </span>
+            <input
+              type="checkbox"
+              checked={cardData.showBlueV !== false}
+              onChange={(e) => onChange({ ...cardData, showBlueV: e.target.checked })}
+              className="rounded text-amber-500 bg-slate-950 border-slate-700"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Content Form Editor */}
       <div className="mt-4 pt-4 border-t border-slate-700/60 space-y-3">
         <div className="font-bold text-xs text-amber-400 tracking-wider uppercase font-kuaile flex items-center justify-between">
-          <span>📝 卡片各个字段细节调整</span>
-          <span className="text-[10px] text-slate-400">实时修改即时同步预览</span>
+          <span>📝 卡片字段细节调整</span>
+          <span className="text-[10px] text-slate-400">实时同步预览</span>
         </div>
 
         <div className="grid grid-cols-2 gap-2">
@@ -471,7 +544,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
             </div>
 
             <p className="text-xs text-slate-400">
-              配置你的 DeepSeek / OpenAI 或兼容格式大模型密钥，开启高清全自动知识图文卡片提炼。
+              配置你的 DeepSeek / 火山方舟 / OpenAI 密钥，开启高清全自动知识图文卡片提炼。
             </p>
 
             <div className="space-y-3 text-xs">
@@ -503,7 +576,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({ cardData, onChange }) =>
                   type="text"
                   value={aiConfig.model}
                   onChange={(e) => setAiConfig({ ...aiConfig, model: e.target.value })}
-                  placeholder="deepseek-chat 或 gpt-4o-mini"
+                  placeholder="deepseek-chat 或 ep-xxx (火山方舟Endpoint)"
                   className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-amber-500 text-slate-100 font-mono text-xs"
                 />
               </div>

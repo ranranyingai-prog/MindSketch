@@ -16,7 +16,6 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 }) => {
   const matchedBest = matchBestTemplate(cardData);
 
-  // Check if current config matches a template's theme & font
   const isSelected = (template: CardTemplate) => {
     return (
       activeConfig.theme === template.config.theme &&
@@ -65,7 +64,6 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                   : 'bg-slate-900/60 border-slate-700/80 hover:border-slate-500 hover:bg-slate-900'
               }`}
             >
-              {/* Badges top right */}
               <div className="flex items-center gap-1.5 absolute top-2.5 right-2.5">
                 {isAiMatch && (
                   <span className="text-[10px] font-bold bg-amber-400 text-slate-950 px-1.5 py-0.5 rounded-full flex items-center gap-0.5 shadow">
@@ -84,7 +82,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                   <span>{tmpl.name}</span>
                 </div>
                 <div className="text-[11px] text-slate-400 mt-1 leading-snug line-clamp-2">
-                  {tmpl.description}
+                  {tmpl.desc}
                 </div>
               </div>
 

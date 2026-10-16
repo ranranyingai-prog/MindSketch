@@ -21,6 +21,13 @@ export interface CardData {
   actionTip: string;
   footerTag: string;
   stampText: string;
+  // Creator IP Branding fields
+  creatorName?: string;
+  creatorTitle?: string;
+  avatarUrl?: string;
+  showBlueV?: boolean;
+  qrCodeUrl?: string;
+  qrCodeLabel?: string;
 }
 
 export interface CardConfig {
@@ -31,6 +38,8 @@ export interface CardConfig {
   showTape: boolean;
   showStamp: boolean;
   showDoodleArrows: boolean;
+  showCreatorIP: boolean;
+  showQrCode: boolean;
   borderThickness: 'thin' | 'medium' | 'thick';
   titleFontSize: number; // 18 to 32
   bodyFontSize: number;  // 14 to 20
@@ -45,4 +54,6 @@ export interface BookPreset {
   keyPoints: KeyPoint[];
   actionTip: string;
   stampText: string;
+  creatorName?: string;
+  creatorTitle?: string;
 }

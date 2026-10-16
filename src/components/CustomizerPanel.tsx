@@ -211,9 +211,9 @@ export const CustomizerPanel: React.FC<CustomizerPanelProps> = ({
 
             <div>
               <label className="text-xs text-slate-400 font-medium block mb-1.5">
-                手绘贴纸装饰开关
+                手绘贴纸与 IP 元素开关
               </label>
-              <div className="flex items-center gap-3 text-xs">
+              <div className="grid grid-cols-2 gap-2 text-xs">
                 <label className="flex items-center gap-1.5 cursor-pointer">
                   <input
                     type="checkbox"
@@ -221,7 +221,7 @@ export const CustomizerPanel: React.FC<CustomizerPanelProps> = ({
                     onChange={(e) => onChange({ ...config, showTape: e.target.checked })}
                     className="rounded text-amber-500 focus:ring-amber-500 bg-slate-900 border-slate-700"
                   />
-                  <span>胶带</span>
+                  <span>顶部胶带</span>
                 </label>
                 <label className="flex items-center gap-1.5 cursor-pointer">
                   <input
@@ -230,16 +230,25 @@ export const CustomizerPanel: React.FC<CustomizerPanelProps> = ({
                     onChange={(e) => onChange({ ...config, showStamp: e.target.checked })}
                     className="rounded text-amber-500 focus:ring-amber-500 bg-slate-900 border-slate-700"
                   />
-                  <span>印章</span>
+                  <span>经典印章</span>
                 </label>
                 <label className="flex items-center gap-1.5 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={config.showDoodleArrows}
-                    onChange={(e) => onChange({ ...config, showDoodleArrows: e.target.checked })}
+                    checked={config.showCreatorIP}
+                    onChange={(e) => onChange({ ...config, showCreatorIP: e.target.checked })}
                     className="rounded text-amber-500 focus:ring-amber-500 bg-slate-900 border-slate-700"
                   />
-                  <span>涂鸦</span>
+                  <span>个人 IP 栏</span>
+                </label>
+                <label className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={config.showQrCode}
+                    onChange={(e) => onChange({ ...config, showQrCode: e.target.checked })}
+                    className="rounded text-amber-500 focus:ring-amber-500 bg-slate-900 border-slate-700"
+                  />
+                  <span>底部二维码</span>
                 </label>
               </div>
             </div>
