@@ -10,7 +10,7 @@ export interface AiConfig {
 const DEFAULT_AI_CONFIG: AiConfig = {
   apiKey: (import.meta as any).env?.VITE_ARK_API_KEY || '',
   baseUrl: (import.meta as any).env?.VITE_ARK_BASE_URL || 'https://ark.cn-beijing.volces.com/api/v3',
-  model: (import.meta as any).env?.VITE_ARK_MODEL || 'doubao-1-5-pro-32k-250115',
+  model: (import.meta as any).env?.VITE_ARK_MODEL || '',
 };
 
 const STORAGE_KEY = 'handdrawn_card_ai_config';
@@ -153,7 +153,7 @@ function fallbackLocalSynthesis(inputText: string, mode: 'book' | 'text'): Parti
       {
         num: '1',
         title: '核心原理透视',
-        desc: `深入剖析《${cleanTitle}》的核心核心立意，帮助你看清事物本质规律。`,
+        desc: `深入剖析《${cleanTitle}》的核心立意，帮助你看清事物本质规律。`,
       },
       {
         num: '2',

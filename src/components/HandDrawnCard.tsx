@@ -1,294 +1,261 @@
 import React from 'react';
 import type { CardData, CardConfig } from '../types/card';
-import {
-  TapeSticker,
-  HandDrawnStamp,
-  HandDrawnArrow,
-  HandDrawnSparkle,
-  HandDrawnBulb,
-} from './HandDrawnIcons';
+import { ZHIKA_CARD_STYLES } from '../data/styles';
 
 interface HandDrawnCardProps {
-  cardRef?: React.RefObject<HTMLDivElement | null>;
-  data: CardData;
+  cardData: CardData;
   config: CardConfig;
+  activeStyleId?: string;
+  aiGeneratedImageUrl?: string;
 }
 
-export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({ cardRef, data, config }) => {
-  // Theme Background and Text Colors
-  const themeStyles = {
-    kraft: {
-      bg: 'bg-paper-kraft text-amber-950',
-      cardBg: 'bg-[#faf3e0]/95',
-      border: 'border-amber-900',
-      shadow: 'sketch-shadow',
-      accentBg: 'bg-amber-200/80',
-      badgeBg: 'bg-amber-800 text-amber-50',
-      subtext: 'text-amber-800',
-      divider: 'border-amber-900/30',
-      pointNumBg: 'bg-amber-500 text-slate-950',
-      pointCardBg: 'bg-amber-100/60 border-amber-900/20',
-    },
-    chalkboard: {
-      bg: 'bg-paper-chalkboard text-emerald-100',
-      cardBg: 'bg-slate-800/90',
-      border: 'border-emerald-200/60',
-      shadow: 'sketch-shadow-chalk',
-      accentBg: 'bg-emerald-950/60',
-      badgeBg: 'bg-emerald-500 text-emerald-950',
-      subtext: 'text-emerald-300',
-      divider: 'border-emerald-200/20',
-      pointNumBg: 'bg-emerald-400 text-slate-950',
-      pointCardBg: 'bg-slate-900/60 border-emerald-500/20',
-    },
-    cute: {
-      bg: 'bg-paper-cute text-slate-800',
-      cardBg: 'bg-white/95',
-      border: 'border-slate-800',
-      shadow: 'sketch-shadow',
-      accentBg: 'bg-amber-100',
-      badgeBg: 'bg-rose-400 text-white',
-      subtext: 'text-slate-600',
-      divider: 'border-slate-800/20',
-      pointNumBg: 'bg-rose-400 text-white',
-      pointCardBg: 'bg-rose-50/50 border-rose-200',
-    },
-    grid: {
-      bg: 'bg-paper-grid text-slate-900',
-      cardBg: 'bg-white/95',
-      border: 'border-slate-900',
-      shadow: 'sketch-shadow',
-      accentBg: 'bg-sky-100',
-      badgeBg: 'bg-indigo-600 text-white',
-      subtext: 'text-slate-600',
-      divider: 'border-slate-300',
-      pointNumBg: 'bg-indigo-600 text-white',
-      pointCardBg: 'bg-indigo-50/50 border-indigo-200',
-    },
-    minimal: {
-      bg: 'bg-stone-100 text-stone-900',
-      cardBg: 'bg-white',
-      border: 'border-stone-800',
-      shadow: 'sketch-shadow',
-      accentBg: 'bg-stone-200',
-      badgeBg: 'bg-stone-800 text-stone-100',
-      subtext: 'text-stone-600',
-      divider: 'border-stone-300',
-      pointNumBg: 'bg-stone-800 text-stone-100',
-      pointCardBg: 'bg-stone-50 border-stone-200',
-    },
-  }[config.theme];
+export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({
+  cardData,
+  config,
+  activeStyleId = '淡彩手绘风',
+  aiGeneratedImageUrl
+}) => {
+  const currentStyle = ZHIKA_CARD_STYLES.find(s => s.id === activeStyleId) || ZHIKA_CARD_STYLES[0];
 
-  // Font family mapping
-  const fontClass = {
+  // Aspect ratio class mapping
+  const ratioClasses: Record<string, string> = {
+    '3:4': 'aspect-[3/4]',
+    '1:1': 'aspect-square',
+    '9:16': 'aspect-[9/16]',
+    'auto': 'min-h-[640px] h-auto'
+  };
+
+  // Font class mapping
+  const fontClasses: Record<string, string> = {
     kuaile: 'font-kuaile',
     mashan: 'font-mashan',
     longcang: 'font-longcang',
-    patrick: 'font-patrick',
-  }[config.font];
+    patrick: 'font-patrick'
+  };
 
-  // Aspect Ratio Styles
-  const ratioClasses = {
-    '3:4': 'w-full max-w-[480px] min-h-[640px] h-auto',
-    '1:1': 'w-full max-w-[480px] min-h-[480px] h-auto',
-    '9:16': 'w-full max-w-[440px] min-h-[780px] h-auto',
-    'auto': 'w-full max-w-[480px] h-auto',
-  }[config.ratio];
+  // Highlighter color mapping
+  const markerBgMap: Record<string, string> = {
+    yellow: 'bg-amber-200/80 text-amber-950',
+    green: 'bg-emerald-200/80 text-emerald-950',
+    pink: 'bg-pink-200/80 text-pink-950',
+    cyan: 'bg-cyan-200/80 text-cyan-950'
+  };
 
-  // Marker Color mapping
-  const markerClass = {
-    yellow: 'marker-yellow',
-    green: 'marker-green',
-    pink: 'marker-pink',
-    cyan: 'marker-cyan',
-  }[config.markerColor];
+  // Theme styling overrides based on selected style or fallback theme
+  const isDarkChalk = config.theme === 'chalkboard' || activeStyleId === '黑板粉笔风' || activeStyleId === '黑板报风' || activeStyleId === '黑金高端风';
 
-  // Border thickness
-  const borderThicknessClass = {
-    thin: 'border-2',
-    medium: 'border-[3px]',
-    thick: 'border-[4px]',
-  }[config.borderThickness];
+  const cardContainerBg = isDarkChalk
+    ? 'bg-[#1E2922] text-emerald-50'
+    : currentStyle.previewBg || 'bg-[#FCFBF8] text-stone-900';
 
+  const cardBorderClass = isDarkChalk
+    ? 'border-4 border-emerald-100/40 shadow-[6px_6px_0px_0px_rgba(34,197,94,0.3)]'
+    : 'border-3 border-stone-800 shadow-[6px_6px_0px_0px_rgba(41,37,36,1)]';
+
+  // If AI generated image URL is present, display full image mode
+  if (aiGeneratedImageUrl) {
+    return (
+      <div
+        id="hand-drawn-card-target"
+        className={`relative w-full max-w-[480px] mx-auto rounded-3xl overflow-hidden shadow-2xl transition-all ${ratioClasses[config.ratio]}`}
+      >
+        <img
+          src={aiGeneratedImageUrl}
+          alt={cardData.bookTitle || 'AI Infographic Card'}
+          className="w-full h-full object-cover rounded-3xl"
+        />
+        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[10px] px-2.5 py-1 rounded-full font-sans tracking-wide">
+          ✨ AI 高清生成卡片
+        </div>
+      </div>
+    );
+  }
+
+  // High Density Vector DOM Layout
   return (
     <div
-      ref={cardRef}
-      className={`relative p-3.5 sm:p-5 flex flex-col justify-between transition-all duration-300 shrink-0 ${themeStyles.bg} ${ratioClasses} ${fontClass}`}
-      style={{ boxSizing: 'border-box' }}
+      id="hand-drawn-card-target"
+      className={`relative w-full max-w-[480px] mx-auto p-5 sm:p-6 rounded-3xl transition-all duration-300 flex flex-col justify-between overflow-hidden select-none ${cardContainerBg} ${cardBorderClass} ${fontClasses[config.font]} ${ratioClasses[config.ratio]}`}
+      style={{
+        backgroundImage: isDarkChalk
+          ? 'radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px)'
+          : 'radial-gradient(rgba(0, 0, 0, 0.04) 1.2px, transparent 1.2px)',
+        backgroundSize: '16px 16px'
+      }}
     >
-      {/* Tape Sticker Accent */}
+      {/* Tape Decoration Header */}
       {config.showTape && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-          <TapeSticker />
+        <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-28 h-6 bg-amber-100/70 backdrop-blur-xs border border-amber-300/60 shadow-xs rotate-[-1.5deg] z-20 flex items-center justify-center">
+          <div className="w-full h-[1px] border-t border-dashed border-amber-400/40"></div>
         </div>
       )}
 
-      {/* Hand-drawn Outer Border Container */}
-      <div
-        className={`relative z-10 flex-1 flex flex-col justify-between p-4 sm:p-5 rounded-2xl ${themeStyles.cardBg} ${themeStyles.border} ${borderThicknessClass} ${themeStyles.shadow} sketch-border`}
-      >
-        <div>
-          {/* IP Creator Profile Header (Zhika style) */}
-          {config.showCreatorIP && (data.creatorName || data.avatarUrl) && (
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-dashed border-slate-700/20">
-              <div className="flex items-center gap-2.5">
-                <div className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-amber-500/80 shadow-sm shrink-0 bg-amber-100 flex items-center justify-center font-bold text-amber-900 text-xs">
-                  {data.avatarUrl ? (
-                    <img src={data.avatarUrl} alt={data.creatorName} className="w-full h-full object-cover" />
-                  ) : (
-                    <span>{(data.creatorName || '智')[0]}</span>
-                  )}
-                </div>
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-1 font-bold text-xs tracking-tight">
-                    <span>{data.creatorName || '智卡创作者'}</span>
-                    {data.showBlueV !== false && (
-                      <span className="w-3.5 h-3.5 rounded-full bg-sky-500 text-white text-[9px] font-black flex items-center justify-center shrink-0">
-                        V
-                      </span>
-                    )}
+      {/* Main Content Area */}
+      <div className="relative z-10 flex flex-col gap-4">
+        {/* Creator IP Personal Branding Bar */}
+        {config.showCreatorIP && (
+          <div className="flex items-center justify-between pb-3 border-b-2 border-dashed border-stone-800/20">
+            <div className="flex items-center gap-2.5">
+              <div className="relative">
+                <img
+                  src={cardData.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"}
+                  alt="Creator Avatar"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-amber-400 shadow-xs"
+                />
+                {cardData.showBlueV !== false && (
+                  <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-sky-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold border border-white shadow-xs">
+                    V
                   </div>
-                  {data.creatorTitle && (
-                    <span className="text-[10px] opacity-70 leading-none mt-0.5">{data.creatorTitle}</span>
-                  )}
-                </div>
+                )}
               </div>
-
-              {/* Top Pill Category Tag */}
-              {data.category && (
-                <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${themeStyles.badgeBg} font-kuaile whitespace-nowrap`}>
-                  {data.category}
+              <div className="flex flex-col">
+                <div className="flex items-center gap-1.5">
+                  <span className={`font-bold text-sm tracking-tight leading-none ${isDarkChalk ? 'text-amber-100' : 'text-stone-900'}`}>
+                    {cardData.creatorName || "智卡知识精选"}
+                  </span>
+                </div>
+                <span className={`text-[11px] font-medium mt-0.5 ${isDarkChalk ? 'text-emerald-200/70' : 'text-stone-500'}`}>
+                  {cardData.creatorTitle || "知识炼金博主 · 50万+阅读"}
                 </span>
-              )}
-            </div>
-          )}
-
-          {/* Main Title & Stamp Row */}
-          <div className="flex items-start justify-between gap-3 mb-2">
-            <div className="flex flex-col gap-1 flex-1">
-              {!config.showCreatorIP && data.category && (
-                <span className={`inline-block text-xs font-bold px-2.5 py-0.5 rounded-full w-max ${themeStyles.badgeBg} font-kuaile`}>
-                  {data.category}
-                </span>
-              )}
-              <h1
-                className="font-black tracking-tight leading-snug mt-1"
-                style={{ fontSize: `${config.titleFontSize}px` }}
-              >
-                {data.bookTitle || '未命名主题'}
-              </h1>
+              </div>
             </div>
 
-            {/* Stamp Badge */}
-            {config.showStamp && (
-              <div className="shrink-0 pt-0.5">
-                <HandDrawnStamp text={data.stampText || '必读经典'} />
+            {/* Topic Badge */}
+            {cardData.category && (
+              <span className="px-2.5 py-1 bg-amber-400 text-stone-950 font-bold text-xs rounded-full border border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                {cardData.category}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Card Header: Book Title & Author */}
+        <div className="relative pt-1">
+          <div className="flex items-center justify-between">
+            <h1
+              className={`font-extrabold tracking-tight leading-tight ${isDarkChalk ? 'text-emerald-50' : 'text-stone-900'}`}
+              style={{ fontSize: `${config.titleFontSize || 24}px` }}
+            >
+              《{cardData.bookTitle || '认知觉醒'}》
+            </h1>
+
+            {/* Stamp Seal */}
+            {config.showStamp && cardData.stampText && (
+              <div className="rotate-[12deg] border-2 border-red-500 text-red-500 text-[11px] font-black px-2 py-0.5 rounded-md tracking-widest uppercase shadow-xs opacity-90 border-dashed">
+                {cardData.stampText}
               </div>
             )}
           </div>
 
-          {/* Author info */}
-          {data.author && (
-            <div className={`text-xs font-medium ${themeStyles.subtext} mb-3 flex items-center gap-1.5`}>
-              <span>✍️ 作者: {data.author}</span>
-            </div>
+          {cardData.author && (
+            <p className={`text-xs font-semibold mt-1 flex items-center gap-1 ${isDarkChalk ? 'text-emerald-200/80' : 'text-stone-500'}`}>
+              <span>✍️ 作者：{cardData.author}</span>
+            </p>
           )}
+        </div>
 
-          <div className={`border-b-2 border-dashed ${themeStyles.divider} my-2.5`} />
+        {/* Golden Core Quote Box */}
+        {cardData.quote && (
+          <div className="relative my-0.5 p-3.5 rounded-2xl bg-amber-50/90 border-2 border-stone-800 shadow-[3px_3px_0px_0px_rgba(41,37,36,1)]">
+            <div className="absolute -top-3 left-3 bg-amber-400 text-stone-950 text-[11px] font-black px-2 py-0.5 rounded-md border border-stone-900 flex items-center gap-1 shadow-xs">
+              <span>💡 核心金句</span>
+            </div>
+            <p
+              className={`font-bold italic text-stone-800 leading-relaxed pt-1.5 ${markerBgMap[config.markerColor]}`}
+              style={{ fontSize: `${config.bodyFontSize || 15}px` }}
+            >
+              “ {cardData.quote} ”
+            </p>
+          </div>
+        )}
 
-          {/* Golden Quote Section with Zhika Golden Box */}
-          {data.quote && (
-            <div className={`p-3.5 rounded-xl ${themeStyles.accentBg} relative my-3 border border-dashed ${themeStyles.border} sketch-border`}>
-              <div className="absolute -top-2.5 left-3 px-2 bg-amber-400 text-slate-950 font-bold text-[11px] rounded sketch-border flex items-center gap-1">
-                <span className="text-xs">💡</span>
-                <span>核心金句</span>
-              </div>
-              <p
-                className="font-bold leading-relaxed pt-1"
-                style={{ fontSize: `${config.bodyFontSize}px` }}
+        {/* Dense Key Points Grid / List */}
+        <div className="flex flex-col gap-2.5 my-1">
+          <div className="flex items-center justify-between">
+            <span className={`text-xs font-black tracking-wider flex items-center gap-1 ${isDarkChalk ? 'text-emerald-200' : 'text-stone-700'}`}>
+              <span className="text-amber-400">✦</span> 核心干货要点
+            </span>
+            <span className={`text-[11px] font-sans ${isDarkChalk ? 'text-emerald-300/50' : 'text-stone-400'}`}>HIGH-DENSITY NOTES</span>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2.5">
+            {cardData.keyPoints && cardData.keyPoints.map((point, index) => (
+              <div
+                key={index}
+                className={`group relative p-3 rounded-xl border-2 shadow-[2.5px_2.5px_0px_0px_rgba(41,37,36,1)] transition-transform hover:-translate-y-0.5 ${
+                  isDarkChalk
+                    ? 'bg-[#2A382E] border-emerald-100/40 text-emerald-50'
+                    : 'bg-white border-stone-800 text-stone-900'
+                }`}
               >
-                “<span className={markerClass}>{data.quote}</span>”
+                <div className="flex items-start gap-2.5">
+                  {/* Number Badge */}
+                  <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-amber-400 border border-stone-900 text-stone-950 font-black text-xs flex items-center justify-center shadow-xs">
+                    0{index + 1}
+                  </div>
+
+                  <div className="flex-1">
+                    <h3 className={`font-extrabold text-sm leading-snug ${isDarkChalk ? 'text-amber-200' : 'text-stone-900'}`}>
+                      {point.title}
+                    </h3>
+                    <p className={`text-xs mt-1 leading-relaxed font-normal ${isDarkChalk ? 'text-emerald-100/90' : 'text-stone-600'}`}>
+                      {point.desc}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Action Tip / Empowerment Box */}
+        {cardData.actionTip && (
+          <div className="relative p-3 rounded-xl bg-amber-100/80 border-2 border-stone-800 shadow-[2px_2px_0px_0px_rgba(41,37,36,1)] flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-full bg-amber-300 border border-stone-900 flex items-center justify-center text-sm flex-shrink-0">
+              💡
+            </div>
+            <div>
+              <span className="text-[11px] font-black text-amber-900 uppercase tracking-wider block">
+                落地赋能指南
+              </span>
+              <p className="text-xs font-bold text-stone-800 leading-tight">
+                {cardData.actionTip}
               </p>
             </div>
-          )}
+          </div>
+        )}
+      </div>
 
-          {/* Key Points / Bullet Takeaways Section */}
-          {data.keyPoints && data.keyPoints.length > 0 && (
-            <div className="space-y-2.5 my-3">
-              <div className="flex items-center gap-2">
-                <HandDrawnSparkle />
-                <h3 className="font-bold text-sm tracking-wide font-kuaile uppercase">
-                  核心干货要点
-                </h3>
-                {config.showDoodleArrows && <HandDrawnArrow className="ml-auto opacity-70" />}
-              </div>
-
-              <div className="space-y-2">
-                {data.keyPoints.map((point, idx) => (
-                  <div
-                    key={idx}
-                    className={`flex items-start gap-2.5 p-2.5 rounded-xl border ${themeStyles.pointCardBg} shadow-sm`}
-                  >
-                    <span className={`shrink-0 w-6 h-6 rounded-lg ${themeStyles.pointNumBg} font-black font-kuaile text-xs flex items-center justify-center sketch-border mt-0.5 shadow-sm`}>
-                      {point.num || (idx + 1 < 10 ? `0${idx + 1}` : idx + 1)}
-                    </span>
-                    <div
-                      className="flex-1 leading-relaxed text-left"
-                      style={{ fontSize: `${Math.max(12, config.bodyFontSize - 1)}px` }}
-                    >
-                      {point.title && (
-                        <span className="font-extrabold mr-1.5 font-kuaile tracking-wide text-amber-950 dark:text-amber-200 inline-block">
-                          {point.title.replace(/[:：\s]+$/, '')}：
-                        </span>
-                      )}
-                      <span className="opacity-95 font-medium break-words leading-relaxed">{point.desc}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Actionable Tip Section */}
-          {data.actionTip && (
-            <div className="mt-3 p-2.5 bg-amber-300/35 border-2 border-slate-800/80 rounded-xl flex items-start gap-2 sketch-border">
-              <HandDrawnBulb className="shrink-0 text-amber-600 mt-0.5" />
-              <div>
-                <div className="font-bold text-xs text-amber-950 font-kuaile">落地赋能指南</div>
-                <div
-                  className="leading-relaxed font-medium"
-                  style={{ fontSize: `${Math.max(11, config.bodyFontSize - 2)}px` }}
-                >
-                  {data.actionTip}
-                </div>
-              </div>
-            </div>
-          )}
+      {/* Footer Branding Bar */}
+      <div className="relative z-10 pt-3 mt-3 border-t-2 border-dashed border-stone-800/20 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 rounded-full bg-amber-400 border border-stone-900 flex items-center justify-center text-[10px] font-black">
+            智
+          </div>
+          <span className={`text-xs font-extrabold ${isDarkChalk ? 'text-emerald-100' : 'text-stone-800'}`}>
+            {cardData.footerTag || "智卡 · 手绘读书笔记"}
+          </span>
         </div>
 
-        {/* Footer Brand & QR Code Section */}
-        <div className={`mt-4 pt-2.5 border-t border-dashed ${themeStyles.divider} flex items-center justify-between text-xs`}>
-          <div className="flex items-center gap-2">
-            {config.showQrCode && data.qrCodeUrl && (
-              <div className="w-9 h-9 p-0.5 bg-white border border-slate-800/40 rounded-lg shadow-sm shrink-0">
-                <img src={data.qrCodeUrl} alt="QR Code" className="w-full h-full object-contain" />
-              </div>
-            )}
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1 font-kuaile opacity-90 font-bold text-xs">
-                <span>🎨</span>
-                <span>{data.footerTag || '手绘知识卡片'}</span>
-              </div>
-              {data.qrCodeLabel && config.showQrCode && (
-                <span className="text-[9px] opacity-60 scale-95 origin-left">{data.qrCodeLabel}</span>
-              )}
-            </div>
+        {/* QR Code / Secondary Branding */}
+        {config.showQrCode && cardData.qrCodeUrl && (
+          <div className="flex items-center gap-1.5 bg-white p-1 rounded-lg border border-stone-800 shadow-xs">
+            <img
+              src={cardData.qrCodeUrl}
+              alt="QR Code"
+              className="w-7 h-7 rounded-sm object-cover"
+            />
+            <span className="text-[9px] font-bold text-stone-600 pr-1 leading-none">
+              扫码关注
+            </span>
           </div>
+        )}
 
-          <div className="text-[10px] opacity-50 font-mono tracking-widest uppercase">
+        {!config.showQrCode && (
+          <span className={`text-[10px] font-black tracking-widest uppercase ${isDarkChalk ? 'text-emerald-300/40' : 'text-stone-400'}`}>
             HAND-DRAWN CARD
-          </div>
-        </div>
+          </span>
+        )}
       </div>
     </div>
   );
