@@ -44,7 +44,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
               : 'text-slate-400 hover:text-white'
           }`}
         >
-          <span>✍️ 内容生成</span>
+          <span>✍️ 内容编辑</span>
         </button>
 
         <button
@@ -81,7 +81,7 @@ export const InputPanel: React.FC<InputPanelProps> = ({
         </button>
       </div>
 
-      {/* Tab 1: Content Generation */}
+      {/* Tab 1: Content Generation & Custom Extra Fields */}
       {activeTab === 'content' && (
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800">
@@ -128,6 +128,28 @@ export const InputPanel: React.FC<InputPanelProps> = ({
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-[11px] font-bold text-slate-400 mb-1 block">分类标签</label>
+              <input
+                type="text"
+                value={cardData.category}
+                onChange={(e) => onUpdateCardData({ category: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:border-amber-400 outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-[11px] font-bold text-slate-400 mb-1 block">适合人群/场景标签</label>
+              <input
+                type="text"
+                value={cardData.targetAudienceTag || ''}
+                onChange={(e) => onUpdateCardData({ targetAudienceTag: e.target.value })}
+                placeholder="适合：职场迷茫期 / 团队管理者"
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:border-amber-400 outline-none"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="text-[11px] font-bold text-slate-400 mb-1 block">核心金句</label>
             <textarea
@@ -135,6 +157,17 @@ export const InputPanel: React.FC<InputPanelProps> = ({
               value={cardData.quote}
               onChange={(e) => onUpdateCardData({ quote: e.target.value })}
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:border-amber-400 outline-none resize-none"
+            />
+          </div>
+
+          <div>
+            <label className="text-[11px] font-bold text-slate-400 mb-1 block">反直觉洞察 / 避坑指南</label>
+            <input
+              type="text"
+              value={cardData.counterIntuitiveInsight || ''}
+              onChange={(e) => onUpdateCardData({ counterIntuitiveInsight: e.target.value })}
+              placeholder="例如：反直觉：知而不行等同于未知，小步快跑胜过完美规划。"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:border-amber-400 outline-none"
             />
           </div>
 

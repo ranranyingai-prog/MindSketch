@@ -6,6 +6,8 @@ export type CardRatio = '3:4' | '1:1' | '9:16' | 'auto';
 
 export type MarkerColor = 'yellow' | 'green' | 'pink' | 'cyan';
 
+export type LayoutMode = 'list' | 'grid2x2' | 'steps' | 'mindmap';
+
 export interface KeyPoint {
   num?: string;
   title: string;
@@ -21,6 +23,9 @@ export interface CardData {
   actionTip: string;
   footerTag: string;
   stampText: string;
+  // Extended richness fields
+  counterIntuitiveInsight?: string; // 反直觉洞察/避坑指南
+  targetAudienceTag?: string;       // 适合人群/场景标签
   // Creator IP Branding fields
   creatorName?: string;
   creatorTitle?: string;
@@ -34,6 +39,7 @@ export interface CardConfig {
   theme: CardTheme;
   font: CardFont;
   ratio: CardRatio;
+  layoutMode: LayoutMode; // Multi-layout mode
   markerColor: MarkerColor;
   showTape: boolean;
   showStamp: boolean;
@@ -54,6 +60,8 @@ export interface BookPreset {
   keyPoints: KeyPoint[];
   actionTip: string;
   stampText: string;
+  counterIntuitiveInsight?: string;
+  targetAudienceTag?: string;
   creatorName?: string;
   creatorTitle?: string;
 }

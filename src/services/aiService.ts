@@ -62,6 +62,8 @@ export async function generateCardFromAi(
     {"num": "3", "title": "干货要点3标题(10字内)", "desc": "要点详细解释(25-45字)"}
   ],
   "actionTip": "落地行动指南/可立刻执行的一小步(20-40字)",
+  "counterIntuitiveInsight": "反直觉洞察/避坑指南(25-40字)",
+  "targetAudienceTag": "适合人群标签(如: 适合：职场迷茫期 / 团队管理者)",
   "stampText": "手绘印章短词(4字内，如: 精选必读/高效赋能/深度思考)"
 }`;
 
@@ -123,6 +125,8 @@ export async function generateCardFromAi(
               { num: '3', title: '持续复盘', desc: '定期回顾执行结果，动态调整改进策略。' },
             ],
         actionTip: parsed.actionTip || '今天就选定一个最小动作开始付诸实践。',
+        counterIntuitiveInsight: parsed.counterIntuitiveInsight || '反直觉：知而不行等同于未知，小步快跑胜过完美规划。',
+        targetAudienceTag: parsed.targetAudienceTag || '适合：追求高效进化的终身学习者',
         stampText: parsed.stampText || '精选必读',
         footerTag: '手绘读书笔记',
       };
@@ -167,6 +171,8 @@ function fallbackLocalSynthesis(inputText: string, mode: 'book' | 'text'): Parti
       },
     ],
     actionTip: `立刻整理关于《${cleanTitle}》的3条核心笔记并分享给朋友。`,
+    counterIntuitiveInsight: '反直觉：认知破局的前提是彻底卸下既有经验的包袱。',
+    targetAudienceTag: '适合：面临成长瓶颈的终身学习者',
     stampText: '高效赋能',
     footerTag: '手绘读书笔记',
   };

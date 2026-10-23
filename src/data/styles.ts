@@ -1,3 +1,24 @@
+export interface StyleDOMTheme {
+  containerBg: string;
+  containerBorder: string;
+  containerShadow: string;
+  headerBadgeBg: string;
+  headerBadgeText: string;
+  quoteBg: string;
+  quoteBorder: string;
+  itemBg: string;
+  itemBorder: string;
+  itemNumBg: string;
+  itemNumText: string;
+  titleColor: string;
+  bodyColor: string;
+  subtextColor: string;
+  actionBg: string;
+  actionBorder: string;
+  accentBadge: string;
+  patternBg?: string;
+}
+
 export interface CardStyleOption {
   id: string;
   name: string;
@@ -8,6 +29,7 @@ export interface CardStyleOption {
   accentColor: string;
   badgeBg: string;
   description: string;
+  domTheme: StyleDOMTheme;
 }
 
 export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
@@ -20,7 +42,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#2D2A26]',
     accentColor: '#E07A5F',
     badgeBg: 'bg-[#F2E9E1]',
-    prompt: '淡彩手绘风（Pen and Ink Wash Style）。视觉特征：精细钢笔线条骨架，淡水彩或马克笔点缀填充；纯白/素描纸背景（#FDFCFA），大面积留白；配以复古贴纸、细手绘框线与极简标注。知识信息图表格式，图文并茂，视觉信息密度高。'
+    prompt: '淡彩手绘风（Pen and Ink Wash Style）。视觉特征：精细钢笔线条骨架，淡水彩或马克笔点缀填充；纯白/素描纸背景（#FDFCFA），大面积留白；配以复古贴纸、细手绘框线与极简标注。',
+    domTheme: {
+      containerBg: 'bg-[#FAF8F5]',
+      containerBorder: 'border-3 border-stone-800',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(41,37,36,1)]',
+      headerBadgeBg: 'bg-[#E07A5F]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#F2E9E1]/80',
+      quoteBorder: 'border-2 border-stone-800',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-stone-800',
+      itemNumBg: 'bg-[#E07A5F]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#2D2A26]',
+      bodyColor: 'text-[#4A4540]',
+      subtextColor: 'text-stone-500',
+      actionBg: 'bg-[#F2E9E1]',
+      actionBorder: 'border-2 border-stone-800',
+      accentBadge: 'bg-[#E07A5F]'
+    }
   },
   {
     id: '黑板粉笔风',
@@ -31,7 +72,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#ECEFEA]',
     accentColor: '#F4A261',
     badgeBg: 'bg-[#2A382E]',
-    prompt: '黑板粉笔手绘风（Chalkboard Chalk Art）。视觉特征：深绿色黑板底纹，白色与彩色粉笔质感手绘字体、手绘箭头、涂鸦框与手绘小人图示。高密度的课堂教学板书结构，条理分明，充满教学赋能感。'
+    prompt: '黑板粉笔手绘风（Chalkboard Chalk Art）。视觉特征：深绿色黑板底纹，白色与彩色粉笔质感手绘字体、手绘箭头、涂鸦框与手绘小人图示。',
+    domTheme: {
+      containerBg: 'bg-[#1E2922]',
+      containerBorder: 'border-4 border-emerald-100/40',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(34,197,94,0.3)]',
+      headerBadgeBg: 'bg-[#F4A261]',
+      headerBadgeText: 'text-stone-950',
+      quoteBg: 'bg-[#2A382E]',
+      quoteBorder: 'border-2 border-emerald-300/40',
+      itemBg: 'bg-[#2A382E]',
+      itemBorder: 'border-2 border-emerald-200/30',
+      itemNumBg: 'bg-[#F4A261]',
+      itemNumText: 'text-stone-950',
+      titleColor: 'text-[#ECEFEA]',
+      bodyColor: 'text-emerald-100',
+      subtextColor: 'text-emerald-300/60',
+      actionBg: 'bg-[#2A382E]',
+      actionBorder: 'border-2 border-emerald-300/40',
+      accentBadge: 'bg-[#F4A261]'
+    }
   },
   {
     id: '可爱手账风',
@@ -42,7 +102,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#4A3E3D]',
     accentColor: '#F190B7',
     badgeBg: 'bg-[#FFE5EC]',
-    prompt: '可爱手账插画风（Cute Journal Style）。视觉特征：米黄色手账本横线纸背景，彩色和纸胶带、波点印章、高光笔标注、萌系涂鸦小图标。手绘分割块与卡片结构，极具社交宣传亲和力。'
+    prompt: '可爱手账插画风（Cute Journal Style）。视觉特征：米黄色手账本横线纸背景，彩色和纸胶带、波点印章、高光笔标注、萌系涂鸦小图标。',
+    domTheme: {
+      containerBg: 'bg-[#FFF9F2]',
+      containerBorder: 'border-3 border-[#4A3E3D]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(241,144,183,0.5)]',
+      headerBadgeBg: 'bg-[#F190B7]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#FFE5EC]',
+      quoteBorder: 'border-2 border-[#F190B7]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#F190B7]/60',
+      itemNumBg: 'bg-[#F190B7]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#4A3E3D]',
+      bodyColor: 'text-[#625352]',
+      subtextColor: 'text-[#948180]',
+      actionBg: 'bg-[#FFE5EC]',
+      actionBorder: 'border-2 border-[#F190B7]',
+      accentBadge: 'bg-[#F190B7]'
+    }
   },
   {
     id: '3D黏土风',
@@ -53,7 +132,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#1F363D]',
     accentColor: '#2EC4B6',
     badgeBg: 'bg-[#CBE896]',
-    prompt: '3D黏土软萌风格（3D Claymorphism Art）。视觉特征：微距捏塑黏土材质、软萌圆形倒角卡片、凸起微阴影、柔软光泽。高信息浓度的结构化知识卡片图解。'
+    prompt: '3D黏土软萌风格（3D Claymorphism Art）。视觉特征：微距捏塑黏土材质、软萌圆形倒角卡片、凸起微阴影、柔软光泽。',
+    domTheme: {
+      containerBg: 'bg-[#EBF4F6]',
+      containerBorder: 'border-4 border-white/80',
+      containerShadow: 'shadow-[8px_8px_16px_0px_rgba(46,196,182,0.3)]',
+      headerBadgeBg: 'bg-[#2EC4B6]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#CBE896]/60',
+      quoteBorder: 'border-2 border-[#2EC4B6]/40',
+      itemBg: 'bg-white/90',
+      itemBorder: 'border-2 border-[#2EC4B6]/30',
+      itemNumBg: 'bg-[#2EC4B6]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#1F363D]',
+      bodyColor: 'text-[#35535C]',
+      subtextColor: 'text-[#658893]',
+      actionBg: 'bg-[#CBE896]/70',
+      actionBorder: 'border-2 border-[#2EC4B6]/50',
+      accentBadge: 'bg-[#2EC4B6]'
+    }
   },
   {
     id: '思维导图风',
@@ -64,7 +162,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#1A2530]',
     accentColor: '#3B82F6',
     badgeBg: 'bg-[#E0E7FF]',
-    prompt: '手绘思维导图风（Hand-drawn Mind Map）。视觉特征：中心主题向四周辐射逻辑树分支，搭配小箭头、数字编号节点、手绘图标与高亮圆框。清晰传达高密度知识干货。'
+    prompt: '手绘思维导图风（Hand-drawn Mind Map）。视觉特征：中心主题向四周辐射逻辑树分支，搭配小箭头、数字编号节点。',
+    domTheme: {
+      containerBg: 'bg-[#F4F6F9]',
+      containerBorder: 'border-3 border-[#1A2530]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(59,130,246,0.6)]',
+      headerBadgeBg: 'bg-[#3B82F6]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#E0E7FF]',
+      quoteBorder: 'border-2 border-[#3B82F6]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#3B82F6]/60',
+      itemNumBg: 'bg-[#3B82F6]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#1A2530]',
+      bodyColor: 'text-[#334155]',
+      subtextColor: 'text-[#64748B]',
+      actionBg: 'bg-[#E0E7FF]',
+      actionBorder: 'border-2 border-[#3B82F6]',
+      accentBadge: 'bg-[#3B82F6]'
+    }
   },
   {
     id: '国潮新中式',
@@ -75,7 +192,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#2B221E]',
     accentColor: '#C84B31',
     badgeBg: 'bg-[#EAE1D0]',
-    prompt: '国潮新中式风格（Modern Chinese Ink Art）。视觉特征：沉香宣纸质感底色，水墨勾勒框线、朱砂红烫金印章、传统云纹插图。充满典雅东方韵味的高质量知识长图。'
+    prompt: '国潮新中式风格（Modern Chinese Ink Art）。视觉特征：沉香宣纸质感底色，水墨勾勒框线、朱砂红烫金印章。',
+    domTheme: {
+      containerBg: 'bg-[#F7F4EB]',
+      containerBorder: 'border-3 border-[#C84B31]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(200,75,49,0.8)]',
+      headerBadgeBg: 'bg-[#C84B31]',
+      headerBadgeText: 'text-amber-50',
+      quoteBg: 'bg-[#EAE1D0]',
+      quoteBorder: 'border-2 border-[#C84B31]',
+      itemBg: 'bg-[#FFFDF7]',
+      itemBorder: 'border-2 border-[#C84B31]/60',
+      itemNumBg: 'bg-[#C84B31]',
+      itemNumText: 'text-amber-50',
+      titleColor: 'text-[#2B221E]',
+      bodyColor: 'text-[#4A3B35]',
+      subtextColor: 'text-[#7A675E]',
+      actionBg: 'bg-[#EAE1D0]',
+      actionBorder: 'border-2 border-[#C84B31]',
+      accentBadge: 'bg-[#C84B31]'
+    }
   },
   {
     id: '复古报纸风',
@@ -86,7 +222,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#1C1917]',
     accentColor: '#991B1B',
     badgeBg: 'bg-[#E5DCCB]',
-    prompt: '复古报纸简报风（Vintage Newspaper Style）。视觉特征：泛黄新闻纸底纹，复古英文/中文大字报头，双列栅格排版，黑色网格线与木刻版画风格插图。'
+    prompt: '复古报纸简报风（Vintage Newspaper Style）。泛黄新闻纸底纹，复古大字报头，黑色栅格线。',
+    domTheme: {
+      containerBg: 'bg-[#F2ECE1]',
+      containerBorder: 'border-3 border-[#1C1917]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(153,27,27,0.8)]',
+      headerBadgeBg: 'bg-[#991B1B]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#E5DCCB]',
+      quoteBorder: 'border-2 border-[#1C1917]',
+      itemBg: 'bg-[#FAF6EE]',
+      itemBorder: 'border-2 border-[#1C1917]',
+      itemNumBg: 'bg-[#991B1B]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#1C1917]',
+      bodyColor: 'text-[#3E3835]',
+      subtextColor: 'text-[#78716C]',
+      actionBg: 'bg-[#E5DCCB]',
+      actionBorder: 'border-2 border-[#991B1B]',
+      accentBadge: 'bg-[#991B1B]'
+    }
   },
   {
     id: '火柴人风',
@@ -97,7 +252,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#111827]',
     accentColor: '#EF4444',
     badgeBg: 'bg-[#F3F4F6]',
-    prompt: '火柴人极简插画风（Stick Figure Doodle）。视觉特征：白纸底色，黑色极简火柴人动作示意图，红色高亮对话框与步骤连线，生动有趣、通俗易懂的场景化干货图解。'
+    prompt: '火柴人极简插画风（Stick Figure Doodle）。白纸底色，黑色极简火柴人示意图，红色高亮对话框。',
+    domTheme: {
+      containerBg: 'bg-[#FFFFFF]',
+      containerBorder: 'border-3 border-[#111827]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(239,68,68,0.8)]',
+      headerBadgeBg: 'bg-[#EF4444]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#FEF2F2]',
+      quoteBorder: 'border-2 border-[#EF4444]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#111827]',
+      itemNumBg: 'bg-[#EF4444]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#111827]',
+      bodyColor: 'text-[#374151]',
+      subtextColor: 'text-[#6B7280]',
+      actionBg: 'bg-[#FEF2F2]',
+      actionBorder: 'border-2 border-[#EF4444]',
+      accentBadge: 'bg-[#EF4444]'
+    }
   },
   {
     id: '白板笔记风',
@@ -108,7 +282,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#111827]',
     accentColor: '#2563EB',
     badgeBg: 'bg-[#EFF6FF]',
-    prompt: '会议室白板讨论风（Whiteboard Brainstorming）。视觉特征：干净白板，蓝/黑/红三色干擦马克笔线条，彩色方形便利贴磁贴，手写体思维框架。'
+    prompt: '会议室白板讨论风（Whiteboard Brainstorming）。干净白板，干擦马克笔线条，彩色便利贴磁贴。',
+    domTheme: {
+      containerBg: 'bg-[#F9FAFB]',
+      containerBorder: 'border-3 border-[#2563EB]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(37,99,235,0.7)]',
+      headerBadgeBg: 'bg-[#2563EB]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#EFF6FF]',
+      quoteBorder: 'border-2 border-[#2563EB]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#2563EB]/50',
+      itemNumBg: 'bg-[#2563EB]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#111827]',
+      bodyColor: 'text-[#1F2937]',
+      subtextColor: 'text-[#4B5563]',
+      actionBg: 'bg-[#EFF6FF]',
+      actionBorder: 'border-2 border-[#2563EB]',
+      accentBadge: 'bg-[#2563EB]'
+    }
   },
   {
     id: '涂鸦笔记风',
@@ -119,7 +312,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#231F20]',
     accentColor: '#FFB703',
     badgeBg: 'bg-[#FFEEC2]',
-    prompt: '视觉手绘笔记风（Sketchnote Visual Note）。视觉特征：高密度的图文混排，大量的箭头、气泡框、星号、灯泡、大字标题与小连画，全图无死角传递核心干货。'
+    prompt: '视觉手绘笔记风（Sketchnote Visual Note）。高密度图文混排，大量的箭头、气泡框、星号、灯泡。',
+    domTheme: {
+      containerBg: 'bg-[#FFFDF7]',
+      containerBorder: 'border-3 border-[#231F20]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(255,183,3,1)]',
+      headerBadgeBg: 'bg-[#FFB703]',
+      headerBadgeText: 'text-stone-950',
+      quoteBg: 'bg-[#FFEEC2]',
+      quoteBorder: 'border-2 border-[#231F20]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#231F20]',
+      itemNumBg: 'bg-[#FFB703]',
+      itemNumText: 'text-stone-950',
+      titleColor: 'text-[#231F20]',
+      bodyColor: 'text-[#3A3536]',
+      subtextColor: 'text-[#736C6E]',
+      actionBg: 'bg-[#FFEEC2]',
+      actionBorder: 'border-2 border-[#231F20]',
+      accentBadge: 'bg-[#FFB703]'
+    }
   },
   {
     id: '水彩插画风',
@@ -130,7 +342,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#2D3A29]',
     accentColor: '#588157',
     badgeBg: 'bg-[#DAD7CD]',
-    prompt: '柔和水彩风（Watercolor Illustration）。视觉特征：自然晕染水彩背景，清新柔和色调，手工水彩花草与知识框线，治愈风文艺宣传图。'
+    prompt: '柔和水彩风（Watercolor Illustration）。自然晕染水彩背景，清新柔和色调。',
+    domTheme: {
+      containerBg: 'bg-[#F3F7F0]',
+      containerBorder: 'border-3 border-[#588157]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(88,129,87,0.6)]',
+      headerBadgeBg: 'bg-[#588157]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#DAD7CD]/50',
+      quoteBorder: 'border-2 border-[#588157]',
+      itemBg: 'bg-white/80',
+      itemBorder: 'border-2 border-[#588157]/50',
+      itemNumBg: 'bg-[#588157]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#2D3A29]',
+      bodyColor: 'text-[#3A4A35]',
+      subtextColor: 'text-[#6A7B64]',
+      actionBg: 'bg-[#DAD7CD]/60',
+      actionBorder: 'border-2 border-[#588157]',
+      accentBadge: 'bg-[#588157]'
+    }
   },
   {
     id: '3D卡通风',
@@ -141,7 +372,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#1E1B4B]',
     accentColor: '#6366F1',
     badgeBg: 'bg-[#E0E7FF]',
-    prompt: '3D Cartoon Blender render. Smooth isometric 3D knowledge infographics, vivid floating widgets, vibrant color cards, sharp lighting, clean layout.'
+    prompt: '3D Cartoon Blender render. Isometric 3D knowledge infographics, vibrant color cards.',
+    domTheme: {
+      containerBg: 'bg-[#EEF2FF]',
+      containerBorder: 'border-3 border-[#6366F1]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(99,102,241,0.6)]',
+      headerBadgeBg: 'bg-[#6366F1]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#E0E7FF]',
+      quoteBorder: 'border-2 border-[#6366F1]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#6366F1]/40',
+      itemNumBg: 'bg-[#6366F1]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#1E1B4B]',
+      bodyColor: 'text-[#312E81]',
+      subtextColor: 'text-[#6366F1]',
+      actionBg: 'bg-[#E0E7FF]',
+      actionBorder: 'border-2 border-[#6366F1]',
+      accentBadge: 'bg-[#6366F1]'
+    }
   },
   {
     id: '裁剪拼贴风',
@@ -152,7 +402,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#18181B]',
     accentColor: '#DC2626',
     badgeBg: 'bg-[#E4E4E7]',
-    prompt: 'Paper Tear Cutout Collage Style. Torn paper edges, mixed media collage, masking tape elements, bold typography and high contrast graphics.'
+    prompt: 'Paper Tear Cutout Collage Style. Torn paper edges, mixed media collage, masking tape elements.',
+    domTheme: {
+      containerBg: 'bg-[#F5F5F0]',
+      containerBorder: 'border-3 border-[#18181B]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(220,38,38,0.8)]',
+      headerBadgeBg: 'bg-[#DC2626]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#E4E4E7]',
+      quoteBorder: 'border-2 border-[#18181B]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#18181B]',
+      itemNumBg: 'bg-[#DC2626]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#18181B]',
+      bodyColor: 'text-[#27272A]',
+      subtextColor: 'text-[#71717A]',
+      actionBg: 'bg-[#E4E4E7]',
+      actionBorder: 'border-2 border-[#DC2626]',
+      accentBadge: 'bg-[#DC2626]'
+    }
   },
   {
     id: '黑金高端风',
@@ -163,7 +432,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#F3F4F6]',
     accentColor: '#D4AF37',
     badgeBg: 'bg-[#262626]',
-    prompt: 'Luxury Black Gold Style. Matte black texture background, metallic gold border lines, elegant typography, high density professional infographics.'
+    prompt: 'Luxury Black Gold Style. Matte black texture background, metallic gold border lines.',
+    domTheme: {
+      containerBg: 'bg-[#121212]',
+      containerBorder: 'border-3 border-[#D4AF37]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(212,175,55,0.5)]',
+      headerBadgeBg: 'bg-[#D4AF37]',
+      headerBadgeText: 'text-black',
+      quoteBg: 'bg-[#1E1E1E]',
+      quoteBorder: 'border-2 border-[#D4AF37]',
+      itemBg: 'bg-[#1A1A1A]',
+      itemBorder: 'border-2 border-[#D4AF37]/50',
+      itemNumBg: 'bg-[#D4AF37]',
+      itemNumText: 'text-black',
+      titleColor: 'text-[#F3F4F6]',
+      bodyColor: 'text-[#E5E7EB]',
+      subtextColor: 'text-[#9CA3AF]',
+      actionBg: 'bg-[#262626]',
+      actionBorder: 'border-2 border-[#D4AF37]',
+      accentBadge: 'bg-[#D4AF37]'
+    }
   },
   {
     id: '教育培训风',
@@ -174,7 +462,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#064E3B]',
     accentColor: '#059669',
     badgeBg: 'bg-[#D1FAE5]',
-    prompt: 'Educational Slide Infographic Style. Clean structured grid, prominent key takeaways, callout boxes, checkmark icons, high readability.'
+    prompt: 'Educational Slide Infographic Style. Clean structured grid, prominent key takeaways.',
+    domTheme: {
+      containerBg: 'bg-[#F0FDF4]',
+      containerBorder: 'border-3 border-[#059669]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(5,150,105,0.6)]',
+      headerBadgeBg: 'bg-[#059669]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#D1FAE5]',
+      quoteBorder: 'border-2 border-[#059669]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#059669]/50',
+      itemNumBg: 'bg-[#059669]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#064E3B]',
+      bodyColor: 'text-[#047857]',
+      subtextColor: 'text-[#10B981]',
+      actionBg: 'bg-[#D1FAE5]',
+      actionBorder: 'border-2 border-[#059669]',
+      accentBadge: 'bg-[#059669]'
+    }
   },
   {
     id: '科普海报风',
@@ -185,18 +492,56 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#0C4A6E]',
     accentColor: '#0284C7',
     badgeBg: 'bg-[#E0F2FE]',
-    prompt: 'Science Explainer Poster Style. Detailed component callouts, numbered index badges, step-by-step arrows, rich infographic data layout.'
+    prompt: 'Science Explainer Poster Style. Detailed component callouts, numbered index badges.',
+    domTheme: {
+      containerBg: 'bg-[#F0F9FF]',
+      containerBorder: 'border-3 border-[#0284C7]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(2,132,199,0.6)]',
+      headerBadgeBg: 'bg-[#0284C7]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#E0F2FE]',
+      quoteBorder: 'border-2 border-[#0284C7]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#0284C7]/50',
+      itemNumBg: 'bg-[#0284C7]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#0C4A6E]',
+      bodyColor: 'text-[#0369A1]',
+      subtextColor: 'text-[#38BDF8]',
+      actionBg: 'bg-[#E0F2FE]',
+      actionBorder: 'border-2 border-[#0284C7]',
+      accentBadge: 'bg-[#0284C7]'
+    }
   },
   {
     id: '扁平插画风',
     name: '扁平插画风',
     category: 'art',
-    description: '矢量矢量几何块 + 鲜明对比色与现代排版',
+    description: '矢量几何块 + 鲜明对比色与现代排版',
     previewBg: 'bg-[#FAF5FF]',
     textColor: 'text-[#581C87]',
     accentColor: '#9333EA',
     badgeBg: 'bg-[#F3E8FF]',
-    prompt: 'Flat Vector Illustration. Bold color blocks, clean geometry, vector icons, structured knowledge hierarchy.'
+    prompt: 'Flat Vector Illustration. Bold color blocks, clean geometry, vector icons.',
+    domTheme: {
+      containerBg: 'bg-[#FAF5FF]',
+      containerBorder: 'border-3 border-[#9333EA]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(147,51,234,0.6)]',
+      headerBadgeBg: 'bg-[#9333EA]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#F3E8FF]',
+      quoteBorder: 'border-2 border-[#9333EA]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#9333EA]/50',
+      itemNumBg: 'bg-[#9333EA]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#581C87]',
+      bodyColor: 'text-[#7E22CE]',
+      subtextColor: 'text-[#A855F7]',
+      actionBg: 'bg-[#F3E8FF]',
+      actionBorder: 'border-2 border-[#9333EA]',
+      accentBadge: 'bg-[#9333EA]'
+    }
   },
   {
     id: '童趣蜡笔风',
@@ -207,7 +552,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#78350F]',
     accentColor: '#D97706',
     badgeBg: 'bg-[#FEF3C7]',
-    prompt: 'Crayon Drawing Style. Textured crayon strokes, warm childhood doodle elements, handmade card feel.'
+    prompt: 'Crayon Drawing Style. Textured crayon strokes, warm childhood doodle elements.',
+    domTheme: {
+      containerBg: 'bg-[#FFFBEB]',
+      containerBorder: 'border-3 border-[#D97706]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(217,119,6,0.6)]',
+      headerBadgeBg: 'bg-[#D97706]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#FEF3C7]',
+      quoteBorder: 'border-2 border-[#D97706]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#D97706]/50',
+      itemNumBg: 'bg-[#D97706]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#78350F]',
+      bodyColor: 'text-[#92400E]',
+      subtextColor: 'text-[#F59E0B]',
+      actionBg: 'bg-[#FEF3C7]',
+      actionBorder: 'border-2 border-[#D97706]',
+      accentBadge: 'bg-[#D97706]'
+    }
   },
   {
     id: '孟菲斯风',
@@ -218,7 +582,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#881337]',
     accentColor: '#E11D48',
     badgeBg: 'bg-[#FFE4E6]',
-    prompt: 'Memphis Pattern Graphic Style. Geometric patterns, zig-zag lines, pastel contrast colors, lively layout.'
+    prompt: 'Memphis Pattern Graphic Style. Geometric patterns, zig-zag lines, pastel contrast colors.',
+    domTheme: {
+      containerBg: 'bg-[#FFF1F2]',
+      containerBorder: 'border-3 border-[#E11D48]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(225,29,72,0.6)]',
+      headerBadgeBg: 'bg-[#E11D48]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#FFE4E6]',
+      quoteBorder: 'border-2 border-[#E11D48]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#E11D48]/50',
+      itemNumBg: 'bg-[#E11D48]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#881337]',
+      bodyColor: 'text-[#9F1239]',
+      subtextColor: 'text-[#FB7185]',
+      actionBg: 'bg-[#FFE4E6]',
+      actionBorder: 'border-2 border-[#E11D48]',
+      accentBadge: 'bg-[#E11D48]'
+    }
   },
   {
     id: '现代简约风',
@@ -229,7 +612,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#09090B]',
     accentColor: '#18181B',
     badgeBg: 'bg-[#F4F4F5]',
-    prompt: 'Swiss Modern Minimalist Infographic. Clean grid, crisp typography, refined line spacing, high contrast layout.'
+    prompt: 'Swiss Modern Minimalist Infographic. Clean grid, crisp typography, refined line spacing.',
+    domTheme: {
+      containerBg: 'bg-[#FFFFFF]',
+      containerBorder: 'border-3 border-[#18181B]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(24,24,27,0.7)]',
+      headerBadgeBg: 'bg-[#18181B]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#F4F4F5]',
+      quoteBorder: 'border-2 border-[#18181B]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#18181B]/40',
+      itemNumBg: 'bg-[#18181B]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#09090B]',
+      bodyColor: 'text-[#27272A]',
+      subtextColor: 'text-[#71717A]',
+      actionBg: 'bg-[#F4F4F5]',
+      actionBorder: 'border-2 border-[#18181B]',
+      accentBadge: 'bg-[#18181B]'
+    }
   },
   {
     id: '分格漫画风',
@@ -240,7 +642,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#18181B]',
     accentColor: '#FACC15',
     badgeBg: 'bg-[#FEF08A]',
-    prompt: 'Comic Panel Grid Style. Black stroke panels, speech bubbles, action lines, storytelling format.'
+    prompt: 'Comic Panel Grid Style. Black stroke panels, speech bubbles, action lines.',
+    domTheme: {
+      containerBg: 'bg-[#FAFAFA]',
+      containerBorder: 'border-4 border-[#18181B]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(250,204,21,1)]',
+      headerBadgeBg: 'bg-[#FACC15]',
+      headerBadgeText: 'text-black',
+      quoteBg: 'bg-[#FEF08A]',
+      quoteBorder: 'border-3 border-[#18181B]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-3 border-[#18181B]',
+      itemNumBg: 'bg-[#FACC15]',
+      itemNumText: 'text-black',
+      titleColor: 'text-[#18181B]',
+      bodyColor: 'text-[#27272A]',
+      subtextColor: 'text-[#71717A]',
+      actionBg: 'bg-[#FEF08A]',
+      actionBorder: 'border-3 border-[#18181B]',
+      accentBadge: 'bg-[#FACC15]'
+    }
   },
   {
     id: '纸雕艺术风',
@@ -251,7 +672,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#831843]',
     accentColor: '#DB2777',
     badgeBg: 'bg-[#FCE7F3]',
-    prompt: 'Layered Papercut Art. Soft depth drop shadows, paper cutouts, 3D layered knowledge card.'
+    prompt: 'Layered Papercut Art. Soft depth drop shadows, paper cutouts.',
+    domTheme: {
+      containerBg: 'bg-[#FDF2F8]',
+      containerBorder: 'border-3 border-[#DB2777]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(219,39,119,0.6)]',
+      headerBadgeBg: 'bg-[#DB2777]',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#FCE7F3]',
+      quoteBorder: 'border-2 border-[#DB2777]',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-[#DB2777]/50',
+      itemNumBg: 'bg-[#DB2777]',
+      itemNumText: 'text-white',
+      titleColor: 'text-[#831843]',
+      bodyColor: 'text-[#9D174D]',
+      subtextColor: 'text-[#F472B6]',
+      actionBg: 'bg-[#FCE7F3]',
+      actionBorder: 'border-2 border-[#DB2777]',
+      accentBadge: 'bg-[#DB2777]'
+    }
   },
   {
     id: '极简黑白画',
@@ -262,7 +702,26 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#000000]',
     accentColor: '#000000',
     badgeBg: 'bg-[#E5E5E5]',
-    prompt: 'Minimalist Line Art Sketch. Monochrome black and white, hand-drawn thick strokes, high contrast layout.'
+    prompt: 'Minimalist Line Art Sketch. Monochrome black and white, hand-drawn thick strokes.',
+    domTheme: {
+      containerBg: 'bg-[#FFFFFF]',
+      containerBorder: 'border-4 border-black',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]',
+      headerBadgeBg: 'bg-black',
+      headerBadgeText: 'text-white',
+      quoteBg: 'bg-[#F5F5F5]',
+      quoteBorder: 'border-2 border-black',
+      itemBg: 'bg-white',
+      itemBorder: 'border-2 border-black',
+      itemNumBg: 'bg-black',
+      itemNumText: 'text-white',
+      titleColor: 'text-black',
+      bodyColor: 'text-stone-800',
+      subtextColor: 'text-stone-500',
+      actionBg: 'bg-[#F5F5F5]',
+      actionBorder: 'border-2 border-black',
+      accentBadge: 'bg-black'
+    }
   },
   {
     id: '黑板报风',
@@ -273,6 +732,25 @@ export const ZHIKA_CARD_STYLES: CardStyleOption[] = [
     textColor: 'text-[#F7F7F7]',
     accentColor: '#FACC15',
     badgeBg: 'bg-[#2D3E3A]',
-    prompt: 'Chinese School Blackboard Poster. Multi-color chalk borders, illustrated title header, dense structured modules.'
+    prompt: 'Chinese School Blackboard Poster. Multi-color chalk borders, illustrated title header.',
+    domTheme: {
+      containerBg: 'bg-[#1C2826]',
+      containerBorder: 'border-4 border-[#FACC15]',
+      containerShadow: 'shadow-[6px_6px_0px_0px_rgba(250,204,21,0.5)]',
+      headerBadgeBg: 'bg-[#FACC15]',
+      headerBadgeText: 'text-black',
+      quoteBg: 'bg-[#2D3E3A]',
+      quoteBorder: 'border-2 border-[#FACC15]',
+      itemBg: 'bg-[#2D3E3A]',
+      itemBorder: 'border-2 border-[#FACC15]/60',
+      itemNumBg: 'bg-[#FACC15]',
+      itemNumText: 'text-black',
+      titleColor: 'text-[#F7F7F7]',
+      bodyColor: 'text-[#FEF08A]',
+      subtextColor: 'text-emerald-200/60',
+      actionBg: 'bg-[#2D3E3A]',
+      actionBorder: 'border-2 border-[#FACC15]',
+      accentBadge: 'bg-[#FACC15]'
+    }
   }
 ];

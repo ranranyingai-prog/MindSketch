@@ -1,8 +1,8 @@
 import React from 'react';
-import type { CardConfig, CardData, CardTheme, CardFont, CardRatio, MarkerColor } from '../types/card';
+import type { CardConfig, CardData, CardTheme, CardFont, CardRatio, MarkerColor, LayoutMode } from '../types/card';
 import type { CardTemplate } from '../data/templates';
 import { TemplateSelector } from './TemplateSelector';
-import { Palette, Type, Layout, Download, Check, Highlighter, Sliders } from 'lucide-react';
+import { Palette, Type, Layout, Download, Check, Highlighter, Sliders, GitFork } from 'lucide-react';
 
 interface CustomizerPanelProps {
   cardData: CardData;
@@ -41,6 +41,13 @@ export const CustomizerPanel: React.FC<CustomizerPanelProps> = ({
     { id: '1:1', label: '1:1', sub: '朋友圈/Square' },
     { id: '9:16', label: '9:16', sub: '海报/Stories' },
     { id: 'auto', label: 'Auto', sub: '自适应长图' },
+  ];
+
+  const layoutModeOptions: { id: LayoutMode; label: string; desc: string }[] = [
+    { id: 'list', label: '标准列表', desc: '纵向卡片图文' },
+    { id: 'grid2x2', label: '2x2 矩阵', desc: '四象限对比' },
+    { id: 'steps', label: '步骤流程', desc: '节点逻辑串联' },
+    { id: 'mindmap', label: '思维导图', desc: '树状分支延伸' },
   ];
 
   const markerOptions: { id: MarkerColor; label: string; class: string }[] = [
@@ -115,27 +122,52 @@ export const CustomizerPanel: React.FC<CustomizerPanelProps> = ({
             </button>
           </div>
 
-          {/* 1. Card Layout Aspect Ratio */}
-          <div className="space-y-1.5">
-            <label className="text-xs text-slate-400 font-medium flex items-center gap-1">
-              <Layout className="w-3.5 h-3.5 text-amber-400" />
-              <span>比例尺寸 (适配社交媒体)</span>
-            </label>
-            <div className="grid grid-cols-4 gap-2">
-              {ratioOptions.map((r) => (
-                <button
-                  key={r.id}
-                  onClick={() => onChange({ ...config, ratio: r.id })}
-                  className={`p-2 rounded-xl border text-center transition-all ${
-                    config.ratio === r.id
-                      ? 'bg-amber-500/20 border-amber-400 ring-1 ring-amber-400 text-amber-300'
-                      : 'bg-slate-900/60 border-slate-700 hover:border-slate-500 text-slate-300'
-                  }`}
-                >
-                  <div className="font-bold text-xs">{r.label}</div>
-                  <div className="text-[10px] text-slate-400 scale-90">{r.sub}</div>
-                </button>
-              ))}
+          {/* 1. Card Layout Aspect Ratio & Structure Mode */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <label className="text-xs text-slate-400 font-medium flex items-center gap-1">
+                <Layout className="w-3.5 h-3.5 text-amber-400" />
+                <span>比例尺寸</span>
+              </label>
+              <div className="grid grid-cols-2 gap-1.5">
+                {ratioOptions.map((r) => (
+                  <button
+                    key={r.id}
+                    onClick={() => onChange({ ...config, ratio: r.id })}
+                    className={`p-1.5 rounded-xl border text-center transition-all ${
+                      config.ratio === r.id
+                        ? 'bg-amber-500/20 border-amber-400 ring-1 ring-amber-400 text-amber-300'
+                        : 'bg-slate-900/60 border-slate-700 hover:border-slate-500 text-slate-300'
+                    }`}
+                  >
+                    <div className="font-bold text-xs">{r.label}</div>
+                    <div className="text-[10px] text-slate-400 scale-90">{r.sub}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs text-slate-400 font-medium flex items-center gap-1">
+                <GitFork className="w-3.5 h-3.5 text-amber-400" />
+                <span>排版结构形态</span>
+              </label>
+              <div className="grid grid-cols-2 gap-1.5">
+                {layoutModeOptions.map((l) => (
+                  <button
+                    key={l.id}
+                    onClick={() => onChange({ ...config, layoutMode: l.id })}
+                    className={`p-1.5 rounded-xl border text-center transition-all ${
+                      (config.layoutMode || 'list') === l.id
+                        ? 'bg-amber-500/20 border-amber-400 ring-1 ring-amber-400 text-amber-300'
+                        : 'bg-slate-900/60 border-slate-700 hover:border-slate-500 text-slate-300'
+                    }`}
+                  >
+                    <div className="font-bold text-xs">{l.label}</div>
+                    <div className="text-[10px] text-slate-400 scale-90">{l.desc}</div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 

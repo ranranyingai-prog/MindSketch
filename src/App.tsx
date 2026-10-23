@@ -30,6 +30,7 @@ export const App: React.FC = () => {
     theme: 'kraft',
     font: 'kuaile',
     ratio: '3:4',
+    layoutMode: 'list',
     markerColor: 'yellow',
     showTape: true,
     showStamp: true,
