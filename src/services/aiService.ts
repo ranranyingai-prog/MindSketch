@@ -48,28 +48,28 @@ export async function generateCardFromAi(
   // If user provided an API Key, call LLM endpoint
   if (config.apiKey && config.apiKey.trim()) {
     try {
-      const systemPrompt = `你是一个专业的知识卡片与手绘图文提炼专家。
-请根据用户的输入（${mode === 'book' ? '书名或主题' : '长文或笔记'}），提取并生成一份精简、高质量的手绘知识图文卡片内容。
-必须严格输出纯 JSON 格式，包含以下字段，不要添加任何 Markdown 格式化标记如 \`\`\`json：
+      const systemPrompt = `你是一位顶级的知识卡片架构师与爆款图文主编。
+请深度理解用户的输入（可以是书名、问题、方向性思考、行业痛点或一段草稿），提炼出富有见解、逻辑清晰、极具社交传播价值的手绘知识图文卡片。
+如果用户输入的是书名，可保留书名或提炼为该书的核心主题；如果输入的是问题或思考方向，请提炼出一个引人入胜的卡片主标题。
+
+必须严格输出纯 JSON 格式，不要添加任何 Markdown 格式化标记如 \`\`\`json：
 {
-  "bookTitle": "主标题或书名(不含书名号)",
-  "author": "作者或出处(若未知可填领域专家或提炼人)",
-  "category": "主题分类标签(如: 个人成长/高效赋能/商业思维/心理学，4字以内)",
-  "quote": "最核心、最具启发性的一句话金句(20-40字)",
+  "bookTitle": "卡片主标题(如:《认知觉醒》或 避坑指南：职场沟通3个反直觉法则)",
+  "author": "副标题/出处/提炼者(如: 团队管理SOP / 商业思维复盘 / 个人品牌)",
+  "category": "领域标签(4字以内，如: 认知破局/职场SOP/商业思考/避坑指南)",
+  "quote": "核心观点或启发性金句(18-35字)",
   "keyPoints": [
-    {"num": "1", "title": "干货要点1标题(10字内)", "desc": "要点详细解释(25-45字)"},
-    {"num": "2", "title": "干货要点2标题(10字内)", "desc": "要点详细解释(25-45字)"},
-    {"num": "3", "title": "干货要点3标题(10字内)", "desc": "要点详细解释(25-45字)"}
+    {"num": "01", "title": "要点1精炼标题(10字内)", "desc": "要点深度剖析与建议(25-45字)"},
+    {"num": "02", "title": "要点2精炼标题(10字内)", "desc": "要点深度剖析与建议(25-45字)"},
+    {"num": "03", "title": "要点3精炼标题(10字内)", "desc": "要点深度剖析与建议(25-45字)"}
   ],
-  "actionTip": "落地行动指南/可立刻执行的一小步(20-40字)",
-  "counterIntuitiveInsight": "反直觉洞察/避坑指南(25-40字)",
-  "targetAudienceTag": "适合人群标签(如: 适合：职场迷茫期 / 团队管理者)",
-  "stampText": "手绘印章短词(4字内，如: 精选必读/高效赋能/深度思考)"
+  "actionTip": "落地赋能指南/即刻行动方案(20-40字)",
+  "counterIntuitiveInsight": "反直觉洞察/避坑警示(25-40字)",
+  "targetAudienceTag": "适合人群标签(如: 适合：自媒体博主 / 初级管理者 / 职场新人)",
+  "stampText": "手绘印章词(4字内，如: 爆款打造/高效赋能/深度思考/避坑神器)"
 }`;
 
-      const userPrompt = mode === 'book'
-        ? `请为书名/主题《${trimmed}》生成精美的手绘知识卡片内容。`
-        : `请提炼以下文字内容为手绘知识卡片：\n\n${trimmed}`;
+      const userPrompt = `用户输入的卡片提炼需求如下：\n\n${trimmed}\n\n请深度解析其意图，生成美观、详实、有洞察力的图文卡片内容。`;
 
       const cleanBaseUrl = config.baseUrl.replace(/\/+$/, '');
       const requestUrl = cleanBaseUrl.endsWith('/chat/completions')
@@ -109,13 +109,13 @@ export async function generateCardFromAi(
 
       const parsed = JSON.parse(jsonString);
       return {
-        bookTitle: parsed.bookTitle ? `《${parsed.bookTitle.replace(/[《》]/g, '')}》` : `《${trimmed}》`,
-        author: parsed.author || '精选读书',
+        bookTitle: parsed.bookTitle || trimmed,
+        author: parsed.author || '智卡精炼思考',
         category: parsed.category || '知识赋能',
         quote: parsed.quote || '知行合一，持续进化。',
         keyPoints: Array.isArray(parsed.keyPoints) && parsed.keyPoints.length > 0
           ? parsed.keyPoints.map((item: any, idx: number) => ({
-              num: String(item.num || idx + 1),
+              num: String(item.num || `0${idx + 1}`),
               title: item.title || `核心要点 ${idx + 1}`,
               desc: item.desc || '在此输入具体洞察说明...',
             }))
@@ -127,7 +127,7 @@ export async function generateCardFromAi(
         actionTip: parsed.actionTip || '今天就选定一个最小动作开始付诸实践。',
         counterIntuitiveInsight: parsed.counterIntuitiveInsight || '反直觉：知而不行等同于未知，小步快跑胜过完美规划。',
         targetAudienceTag: parsed.targetAudienceTag || '适合：追求高效进化的终身学习者',
-        stampText: parsed.stampText || '精选必读',
+        stampText: parsed.stampText || '深度思考',
         footerTag: '手绘读书笔记',
       };
     } catch (err: any) {

@@ -15,17 +15,17 @@ export interface KeyPoint {
 }
 
 export interface CardData {
-  bookTitle: string;
-  author: string;
-  category: string;
-  quote: string;
-  keyPoints: KeyPoint[];
-  actionTip: string;
-  footerTag: string;
-  stampText: string;
+  bookTitle: string;                // 主标题（主题/问题/书名）
+  author: string;                   // 副标题/提炼者/作者
+  category: string;                 // 分类标签 (e.g., 认知破局, 职场SOP)
+  quote: string;                    // 核心金句 / 核心论点
+  keyPoints: KeyPoint[];            // 干货要点列表
+  actionTip: string;                // 落地赋能 / 行动指南
+  footerTag: string;                // 底部标语
+  stampText: string;                // 印章文案
   // Extended richness fields
-  counterIntuitiveInsight?: string; // 反直觉洞察/避坑指南
-  targetAudienceTag?: string;       // 适合人群/场景标签
+  counterIntuitiveInsight?: string; // 反直觉洞察 / 避坑指南
+  targetAudienceTag?: string;       // 适合人群 / 场景标签
   // Creator IP Branding fields
   creatorName?: string;
   creatorTitle?: string;

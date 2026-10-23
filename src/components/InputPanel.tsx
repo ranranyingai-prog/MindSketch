@@ -27,6 +27,13 @@ export const InputPanel: React.FC<InputPanelProps> = ({
   const [aiInputText, setAiInputText] = useState('');
   const [apiKeyInput, setApiKeyInput] = useState(() => localStorage.getItem('IMAGE_GEN_API_KEY') || '');
 
+  const inspirationChips = [
+    { label: '🚀 如何打造个人IP？', text: '如何从0到1高效打造普通人个人IP？' },
+    { label: '👔 刚升PM如何带团队？', text: '新手管理者破局：刚升PM如何快速带团队？' },
+    { label: '⚠️ 职场沟通3个避坑法则', text: '避坑指南：职场高效沟通的3个反直觉法则' },
+    { label: '📈 商业模式与用户增长', text: '商业增长：如何提高用户复购与LTV生命周期价值？' },
+  ];
+
   const handleSaveApiKey = () => {
     localStorage.setItem('IMAGE_GEN_API_KEY', apiKeyInput.trim());
     alert('API Key 已保存至本地缓存！');
@@ -84,24 +91,55 @@ export const InputPanel: React.FC<InputPanelProps> = ({
       {/* Tab 1: Content Generation & Custom Extra Fields */}
       {activeTab === 'content' && (
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800">
-            <label className="text-xs font-extrabold text-amber-400 flex items-center gap-1.5">
-              <span>🪄 AI 智能提炼（输入书名/主题或粘贴长文）</span>
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={aiInputText}
-                onChange={(e) => setAiInputText(e.target.value)}
-                placeholder="例如：《原则》、《被讨厌的勇气》或输入的学习总结..."
-                className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
-              />
+          <div className="flex flex-col gap-2.5 bg-slate-950/70 p-4 rounded-2xl border border-amber-500/30 shadow-inner">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-extrabold text-amber-400 flex items-center gap-1.5">
+                <span>🪄 AI 意图理解与灵感提炼（输入方向、问题或段落）</span>
+              </label>
+              <span className="text-[10px] text-amber-300/80 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
+                支持任意问题与想法
+              </span>
+            </div>
+
+            <textarea
+              rows={2}
+              value={aiInputText}
+              onChange={(e) => setAiInputText(e.target.value)}
+              placeholder="输入任何方向或详细问题，如：如何给刚入职新人做培训？/ 规避团队内耗的3个方法 / 输入书名《认知觉醒》..."
+              className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400 resize-none"
+            />
+
+            {/* Quick Inspiration Prompt Chips */}
+            <div className="space-y-1.5">
+              <span className="text-[10px] text-slate-400 font-medium">💡 灵感方向快速填充：</span>
+              <div className="flex flex-wrap gap-1.5">
+                {inspirationChips.map((chip, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setAiInputText(chip.text)}
+                    className="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-amber-300 border border-slate-700 hover:border-amber-400/50 px-2.5 py-1 rounded-lg transition-all"
+                  >
+                    {chip.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-1">
               <button
                 disabled={isGeneratingAI || !aiInputText.trim()}
                 onClick={() => onAIGenerate(aiInputText)}
-                className="px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-md disabled:opacity-50 transition-all flex items-center gap-1 flex-shrink-0"
+                className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg disabled:opacity-50 transition-all flex items-center justify-center gap-1.5 active:scale-95"
               >
-                {isGeneratingAI ? '提炼中...' : '一键提炼'}
+                {isGeneratingAI ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
+                    <span>AI 深度理解并提炼中...</span>
+                  </>
+                ) : (
+                  <span>✨ 深度理解并生成图文</span>
+                )}
               </button>
             </div>
           </div>

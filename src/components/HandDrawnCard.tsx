@@ -119,32 +119,34 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({
           </div>
         )}
 
-        {/* Card Header: Book Title, Author & Audience Tag */}
+        {/* Card Header: Main Title, Subtitle/Author & Audience Tag */}
         <div className="relative pt-0.5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <h1
               className={`font-extrabold tracking-tight leading-tight ${domTheme.titleColor}`}
               style={{ fontSize: `${config.titleFontSize || 22}px` }}
             >
-              《{cardData.bookTitle || '认知觉醒'}》
+              {cardData.bookTitle.startsWith('《') || cardData.bookTitle.includes('：') || cardData.bookTitle.includes('？') || cardData.bookTitle.includes('?')
+                ? cardData.bookTitle
+                : `《${cardData.bookTitle}》`}
             </h1>
 
             {/* Stamp Seal */}
             {config.showStamp && cardData.stampText && (
-              <div className="rotate-[12deg] border-2 border-red-500 text-red-500 text-[11px] font-black px-2 py-0.5 rounded-md tracking-widest uppercase shadow-xs opacity-90 border-dashed">
+              <div className="rotate-[12deg] border-2 border-red-500 text-red-500 text-[11px] font-black px-2 py-0.5 rounded-md tracking-widest uppercase shadow-xs opacity-90 border-dashed shrink-0">
                 {cardData.stampText}
               </div>
             )}
           </div>
 
-          <div className="flex items-center justify-between mt-1">
+          <div className="flex items-center justify-between mt-1.5 gap-2">
             {cardData.author && (
               <p className={`text-xs font-semibold ${domTheme.subtextColor}`}>
-                ✍️ 作者：{cardData.author}
+                ✍️ {cardData.author}
               </p>
             )}
             {cardData.targetAudienceTag && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-200/80 text-stone-800 border border-stone-400">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-stone-200/80 text-stone-800 border border-stone-400 shrink-0">
                 {cardData.targetAudienceTag}
               </span>
             )}

@@ -18,10 +18,12 @@ export const App: React.FC = () => {
     quote: BOOK_PRESETS[0].quote,
     keyPoints: BOOK_PRESETS[0].keyPoints,
     actionTip: BOOK_PRESETS[0].actionTip,
-    footerTag: '智卡·手绘读书笔记',
+    footerTag: '智卡·手绘知识图文',
     stampText: BOOK_PRESETS[0].stampText,
-    creatorName: '智卡知识精选',
-    creatorTitle: '知识提炼博主 · 50万+阅读',
+    counterIntuitiveInsight: BOOK_PRESETS[0].counterIntuitiveInsight,
+    targetAudienceTag: BOOK_PRESETS[0].targetAudienceTag,
+    creatorName: '智卡IP进化营',
+    creatorTitle: '知识IP孵化导师 · 累计赋能10W+',
     avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
     showBlueV: true,
   });
@@ -56,7 +58,7 @@ export const App: React.FC = () => {
   const handleAIGenerateText = async (prompt: string) => {
     setIsGeneratingAI(true);
     try {
-      const generated = await generateCardFromAi(prompt, 'book');
+      const generated = await generateCardFromAi(prompt, 'text');
       setCardData(prev => ({
         ...prev,
         bookTitle: generated.bookTitle || prev.bookTitle,
@@ -65,6 +67,8 @@ export const App: React.FC = () => {
         quote: generated.quote || prev.quote,
         keyPoints: generated.keyPoints && generated.keyPoints.length > 0 ? generated.keyPoints : prev.keyPoints,
         actionTip: generated.actionTip || prev.actionTip,
+        counterIntuitiveInsight: generated.counterIntuitiveInsight || prev.counterIntuitiveInsight,
+        targetAudienceTag: generated.targetAudienceTag || prev.targetAudienceTag,
         stampText: generated.stampText || prev.stampText
       }));
       setAiGeneratedImageUrl(undefined);
