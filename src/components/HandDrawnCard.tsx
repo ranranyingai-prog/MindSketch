@@ -18,12 +18,12 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({
   const currentStyle = ZHIKA_CARD_STYLES.find(s => s.id === activeStyleId) || ZHIKA_CARD_STYLES[0];
   const domTheme = currentStyle.domTheme;
 
-  // Aspect ratio class mapping
+  // Aspect ratio class mapping - use min-height with auto layout to prevent content truncation
   const ratioClasses: Record<string, string> = {
-    '3:4': 'aspect-[3/4]',
-    '1:1': 'aspect-square',
-    '9:16': 'aspect-[9/16]',
-    'auto': 'min-h-[640px] h-auto'
+    '3:4': 'min-h-[620px] h-auto',
+    '1:1': 'min-h-[480px] h-auto',
+    '9:16': 'min-h-[720px] h-auto',
+    'auto': 'min-h-[500px] h-auto'
   };
 
   // Font class mapping
@@ -67,7 +67,7 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({
   return (
     <div
       id="hand-drawn-card-target"
-      className={`relative w-full max-w-[480px] mx-auto p-5 sm:p-6 rounded-3xl transition-all duration-300 flex flex-col justify-between overflow-hidden select-none ${domTheme.containerBg} ${domTheme.containerBorder} ${domTheme.containerShadow} ${fontClasses[config.font]} ${ratioClasses[config.ratio]}`}
+      className={`relative w-full max-w-[480px] mx-auto p-5 sm:p-6 rounded-3xl transition-all duration-300 flex flex-col justify-between overflow-visible select-none ${domTheme.containerBg} ${domTheme.containerBorder} ${domTheme.containerShadow} ${fontClasses[config.font]} ${ratioClasses[config.ratio]}`}
       style={{
         backgroundImage: 'radial-gradient(rgba(0, 0, 0, 0.04) 1.2px, transparent 1.2px)',
         backgroundSize: '16px 16px'
@@ -84,13 +84,17 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({
       <div className="relative z-10 flex flex-col gap-3.5">
         {/* Creator IP Personal Branding Bar */}
         {config.showCreatorIP && (
-          <div className="flex items-center justify-between pb-2.5 border-b-2 border-dashed border-stone-800/20">
-            <div className="flex items-center gap-2.5">
-              <div className="relative">
+          <div className="flex items-center justify-between pb-2.5 border-b-2 border-dashed border-stone-800/20 gap-2">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+              <div className="relative shrink-0">
                 <img
-                  src={cardData.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"}
+                  src={cardData.avatarUrl || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2523f59e0b'/%3E%3Ctext x='50' y='60' font-size='40' font-weight='bold' text-anchor='middle' fill='%2523020617'%3E智%3C/text%3E%3C/svg%3E"}
+                  crossOrigin="anonymous"
                   alt="Creator Avatar"
                   className="w-10 h-10 rounded-full object-cover border-2 border-amber-400 shadow-xs"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2523f59e0b'/%3E%3Ctext x='50' y='60' font-size='40' font-weight='bold' text-anchor='middle' fill='%2523020617'%3E智%3C/text%3E%3C/svg%3E";
+                  }}
                 />
                 {cardData.showBlueV !== false && (
                   <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-sky-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold border border-white shadow-xs">
@@ -98,13 +102,13 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({
                   </div>
                 )}
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className={`font-bold text-sm tracking-tight leading-none ${domTheme.titleColor}`}>
+                  <span className={`font-bold text-sm tracking-tight leading-snug whitespace-nowrap overflow-hidden text-ellipsis ${domTheme.titleColor}`}>
                     {cardData.creatorName || "智卡知识精选"}
                   </span>
                 </div>
-                <span className={`text-[11px] font-medium mt-0.5 ${domTheme.subtextColor}`}>
+                <span className={`text-[11px] font-medium mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis ${domTheme.subtextColor}`}>
                   {cardData.creatorTitle || "知识炼金博主 · 50万+阅读"}
                 </span>
               </div>
@@ -112,7 +116,7 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({
 
             {/* Topic Badge */}
             {cardData.category && (
-              <span className={`px-2.5 py-1 ${domTheme.accentBadge} ${domTheme.headerBadgeText} font-bold text-xs rounded-full border border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}>
+              <span className={`px-2.5 py-1 shrink-0 whitespace-nowrap ${domTheme.accentBadge} ${domTheme.headerBadgeText} font-bold text-xs rounded-full border border-stone-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}>
                 {cardData.category}
               </span>
             )}
@@ -156,14 +160,14 @@ export const HandDrawnCard: React.FC<HandDrawnCardProps> = ({
         {/* Golden Core Quote Box */}
         {cardData.quote && (
           <div className={`relative my-0.5 p-3 rounded-2xl ${domTheme.quoteBg} ${domTheme.quoteBorder} shadow-[3px_3px_0px_0px_rgba(41,37,36,1)]`}>
-            <div className={`absolute -top-3 left-3 ${domTheme.headerBadgeBg} ${domTheme.headerBadgeText} text-[10px] font-black px-2 py-0.5 rounded-md border border-stone-900 shadow-xs`}>
+            <div className={`absolute -top-3 left-3 whitespace-nowrap z-10 ${domTheme.headerBadgeBg} ${domTheme.headerBadgeText} text-[10px] font-black px-2 py-0.5 rounded-md border border-stone-900 shadow-xs`}>
               💡 核心金句
             </div>
             <p
               className={`font-bold italic leading-relaxed pt-1 ${domTheme.bodyColor} ${markerBgMap[config.markerColor]}`}
               style={{ fontSize: `${config.bodyFontSize || 14}px` }}
             >
-              “ {cardData.quote} ”
+              “{cardData.quote}”
             </p>
           </div>
         )}

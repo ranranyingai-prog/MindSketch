@@ -24,7 +24,7 @@ export const App: React.FC = () => {
     targetAudienceTag: BOOK_PRESETS[0].targetAudienceTag,
     creatorName: '智卡IP进化营',
     creatorTitle: '知识IP孵化导师 · 累计赋能10W+',
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    avatarUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2523f59e0b'/%3E%3Ctext x='50' y='60' font-size='40' font-weight='bold' text-anchor='middle' fill='%2523020617'%3E智%3C/text%3E%3C/svg%3E",
     showBlueV: true,
   });
 
@@ -106,20 +106,31 @@ export const App: React.FC = () => {
     setIsExporting(true);
 
     try {
-      if (document.fonts && document.fonts.ready) {
-        await document.fonts.ready;
-      }
-      await new Promise(resolve => setTimeout(resolve, 300));
-
       const width = targetElem.offsetWidth;
       const height = targetElem.offsetHeight;
 
-      const dataUrl = await toPng(targetElem, {
-        width,
-        height,
-        pixelRatio: 3,
-        cacheBust: true,
-      });
+      // Reliable toPng export with font rendering support and fallback
+      let dataUrl = '';
+      try {
+        dataUrl = await toPng(targetElem, {
+          width,
+          height,
+          pixelRatio: 2,
+          cacheBust: true,
+        });
+      } catch (firstErr) {
+        console.warn('Initial toPng with font embedding failed, retrying fallback:', firstErr);
+        dataUrl = await toPng(targetElem, {
+          width,
+          height,
+          pixelRatio: 1.5,
+          skipFonts: true,
+        });
+      }
+
+      if (!dataUrl) {
+        throw new Error('生成的图片数据为空');
+      }
 
       setPreviewImageUrl(dataUrl);
 
@@ -131,15 +142,16 @@ export const App: React.FC = () => {
 
       try {
         const link = document.createElement('a');
-        link.download = `${cardData.bookTitle.replace(/[《》]/g, '') || '手绘卡片'}_智卡图文.png`;
+        const cleanTitle = (cardData.bookTitle || '智卡图文').replace(/[《》\?:：\/]/g, '');
+        link.download = `${cleanTitle}_手绘卡片.png`;
         link.href = dataUrl;
         link.click();
       } catch (e) {
-        console.log('Mobile browser fallback to long-press preview', e);
+        console.log('Mobile browser fallback to preview modal', e);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to generate card image:', err);
-      alert('卡片生成过程中遇到微小异常，请重试');
+      alert(`卡片生成提示：${err?.message || '生成失败，请刷新后重试'}`);
     } finally {
       setIsExporting(false);
     }
@@ -228,6 +240,22 @@ export const App: React.FC = () => {
           />
         </div>
       </main>
+
+      {/* Fixed Mobile Bottom Action Bar */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-3 flex items-center justify-between gap-3 shadow-2xl">
+        <div className="flex flex-col">
+          <span className="text-xs font-bold text-amber-400 font-kuaile">智卡手绘图文</span>
+          <span className="text-[10px] text-slate-400">点击生成并导出高清图片</span>
+        </div>
+        <button
+          onClick={handleExportImage}
+          disabled={isExporting}
+          className="px-5 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-xs rounded-xl shadow-lg flex items-center gap-1.5 active:scale-95 disabled:opacity-50"
+        >
+          {isExporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+          <span>{isExporting ? '生成中...' : '生成/导出卡片'}</span>
+        </button>
+      </div>
 
       {/* Preview Modal */}
       {previewImageUrl && (
