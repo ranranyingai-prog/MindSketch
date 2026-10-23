@@ -5,10 +5,10 @@ import type { CardData, CardConfig } from './types/card';
 import { BOOK_PRESETS } from './data/bookPresets';
 import { HandDrawnCard } from './components/HandDrawnCard';
 import { InputPanel } from './components/InputPanel';
-import { CustomizerPanel } from './components/CustomizerPanel';
+import { ApiKeyModal } from './components/ApiKeyModal';
 import { generateAIInfographicImage } from './services/imageGenService';
 import { generateCardFromAi } from './services/aiService';
-import { Eye, Download, Smartphone, Sparkles, RefreshCw } from 'lucide-react';
+import { Eye, Download, Smartphone, Sparkles, RefreshCw, Key } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [cardData, setCardData] = useState<CardData>({
@@ -50,6 +50,7 @@ export const App: React.FC = () => {
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
 
   const handleUpdateCardData = (updated: Partial<CardData>) => {
     setCardData(prev => ({ ...prev, ...updated }));
@@ -85,7 +86,7 @@ export const App: React.FC = () => {
     try {
       const apiKey = localStorage.getItem('IMAGE_GEN_API_KEY') || '';
       if (!apiKey) {
-        alert('尚未配置云端 API Key！系统将以高密度 DOM 矢量渲染展示，如需生成像素级 AI 扩散模型图文，请在“⚙️ 云端API”中填入 Key。');
+        setIsKeyModalOpen(true);
         setAiGeneratedImageUrl(undefined);
         return;
       }
@@ -109,7 +110,6 @@ export const App: React.FC = () => {
       const width = targetElem.offsetWidth;
       const height = targetElem.offsetHeight;
 
-      // Reliable toPng export with font rendering support and fallback
       let dataUrl = '';
       try {
         dataUrl = await toPng(targetElem, {
@@ -119,7 +119,7 @@ export const App: React.FC = () => {
           cacheBust: true,
         });
       } catch (firstErr) {
-        console.warn('Initial toPng with font embedding failed, retrying fallback:', firstErr);
+        console.warn('Initial toPng failed, retrying fallback:', firstErr);
         dataUrl = await toPng(targetElem, {
           width,
           height,
@@ -159,10 +159,10 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans pb-20 sm:pb-6">
-      {/* Top Header Bar */}
-      <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3">
+      {/* Top Navigation Header Bar */}
+      <header className="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 shadow-md">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 font-bold font-kuaile flex items-center justify-center text-lg sketch-border">
               智
             </div>
@@ -171,39 +171,50 @@ export const App: React.FC = () => {
                 智卡 · 手绘风知识图文生成器
               </h1>
               <p className="text-[10px] text-slate-400 hidden sm:block">
-                手机H5专属 · 24+手绘风格 · 个人IP打造 · 社交矩阵宣传 · 高清导出
+                以客户为中心的极简 H5 创作工坊 · 意图智能理解 · 优雅手绘排版
               </p>
             </div>
           </div>
 
-          <button
-            onClick={handleExportImage}
-            disabled={isExporting}
-            className="hidden sm:flex px-4 py-2 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm rounded-xl shadow-lg transition-all items-center gap-1.5 active:scale-95 disabled:opacity-50"
-          >
-            {isExporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            <span>生成精美卡片</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsKeyModalOpen(true)}
+              className="p-2 text-slate-400 hover:text-amber-300 bg-slate-800 hover:bg-slate-700/80 rounded-xl transition-all border border-slate-700 flex items-center gap-1 text-xs"
+              title="配置 API Key"
+            >
+              <Key className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline font-medium">API 密钥</span>
+            </button>
+
+            <button
+              onClick={handleExportImage}
+              disabled={isExporting}
+              className="hidden sm:flex px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg transition-all items-center gap-1.5 active:scale-95 disabled:opacity-50"
+            >
+              {isExporting ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+              <span>导出高清图文卡片</span>
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Main Workspace Layout */}
+      {/* Main Streamlined Workspace */}
       <main className="flex-1 max-w-6xl w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Side: Real-time Live Hand-Drawn Card Preview Canvas */}
-        <div className="lg:col-span-6 flex flex-col items-center justify-center bg-slate-900/60 p-2 sm:p-6 rounded-3xl border border-slate-800/80 shadow-2xl relative min-h-[420px] overflow-x-hidden">
+        {/* Left Workspace: Interactive Card Canvas Preview */}
+        <div className="lg:col-span-6 flex flex-col items-center justify-center bg-slate-900/60 p-2 sm:p-5 rounded-3xl border border-slate-800/80 shadow-2xl relative min-h-[440px] overflow-x-hidden">
           <div className="w-full flex items-center justify-between mb-3 text-xs text-slate-400 px-2">
-            <span className="flex items-center gap-1 font-kuaile text-amber-400">
+            <span className="flex items-center gap-1 font-kuaile text-amber-400 font-bold">
               <Eye className="w-3.5 h-3.5" />
-              <span>智卡手机实时预览 ({cardConfig.ratio})</span>
+              <span>实时效果渲染 ({cardConfig.ratio})</span>
             </span>
-            <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700 flex items-center gap-1">
+            <span className="text-[10px] bg-slate-800 px-2 py-0.5 rounded-full border border-slate-700/80 flex items-center gap-1 text-slate-300">
               <Smartphone className="w-3 h-3 text-amber-400" />
-              <span>全屏响应式</span>
+              <span>智能手机高颜值视图</span>
             </span>
           </div>
 
-          {/* Render Hand-Drawn Card Wrapper */}
-          <div className="w-full flex justify-center py-2 px-1">
+          {/* Render Hand-Drawn Card Target */}
+          <div className="w-full flex justify-center py-1 px-1">
             <HandDrawnCard
               cardData={cardData}
               config={cardConfig}
@@ -214,38 +225,32 @@ export const App: React.FC = () => {
 
           <div className="mt-3 flex items-center gap-1.5 text-[11px] text-slate-400 text-center">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span>适配微信朋友圈、小红书、社群推文及培训课件</span>
+            <span>生成精美高清手绘图文，一键分享至朋友圈或课件</span>
           </div>
         </div>
 
-        {/* Right Side: Interactive Editor & Customizer Tabs */}
-        <div className="lg:col-span-6 space-y-4">
+        {/* Right Workspace: Guided Customer-Centric Workflow Control Center */}
+        <div className="lg:col-span-6">
           <InputPanel
             cardData={cardData}
-            onUpdateCardData={handleUpdateCardData}
-            onAIGenerate={handleAIGenerateText}
-            onGenerateAIImage={handleGenerateAIImage}
+            cardConfig={cardConfig}
+            selectedStyleId={selectedStyleId}
             isGeneratingAI={isGeneratingAI}
             isGeneratingImage={isGeneratingImage}
-            selectedStyleId={selectedStyleId}
+            onUpdateCardData={handleUpdateCardData}
+            onUpdateConfig={setCardConfig}
             onSelectStyleId={setSelectedStyleId}
-          />
-
-          <CustomizerPanel
-            cardData={cardData}
-            config={cardConfig}
-            onChange={setCardConfig}
-            onExport={handleExportImage}
-            isExporting={isExporting}
+            onAIGenerate={handleAIGenerateText}
+            onGenerateAIImage={handleGenerateAIImage}
           />
         </div>
       </main>
 
       {/* Fixed Mobile Bottom Action Bar */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 p-3 flex items-center justify-between gap-3 shadow-2xl">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/90 p-3 flex items-center justify-between gap-3 shadow-2xl">
         <div className="flex flex-col">
           <span className="text-xs font-bold text-amber-400 font-kuaile">智卡手绘图文</span>
-          <span className="text-[10px] text-slate-400">点击生成并导出高清图片</span>
+          <span className="text-[10px] text-slate-400">一键导出手机高清长图</span>
         </div>
         <button
           onClick={handleExportImage}
@@ -256,6 +261,12 @@ export const App: React.FC = () => {
           <span>{isExporting ? '生成中...' : '生成/导出卡片'}</span>
         </button>
       </div>
+
+      {/* API Key Drawer Modal */}
+      <ApiKeyModal
+        isOpen={isKeyModalOpen}
+        onClose={() => setIsKeyModalOpen(false)}
+      />
 
       {/* Preview Modal */}
       {previewImageUrl && (
